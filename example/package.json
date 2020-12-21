@@ -12,6 +12,7 @@
     "jabber": "^1.2.1",
     "meteor-node-stubs": "^1.0.1",
     "react": "^16.13.1",
+    "react-data-table-component": "^6.11.6",
     "react-dom": "^16.13.1"
   },
   "meteor": {
