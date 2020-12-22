@@ -11,7 +11,7 @@ Package.onUse(function(api) {
   
   api.use('ecmascript');
   api.use('mongo');
-  api.use('tmeasday:publish-counts');
+  api.use('tmeasday:publish-counts@0.2.1');
   
   api.mainModule('server.js', 'server');
 });
