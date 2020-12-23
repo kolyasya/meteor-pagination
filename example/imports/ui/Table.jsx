@@ -67,8 +67,8 @@ const Table = ({
       progressPending={postsLoading}
       pagination
       paginationServer
-      paginationTotalRows={totalRows}
       selectableRows
+      paginationTotalRows={totalRows}
       onChangeRowsPerPage={onChangeRowsPerPage}
       onChangePage={onChangePage}
       onSort={onSort}

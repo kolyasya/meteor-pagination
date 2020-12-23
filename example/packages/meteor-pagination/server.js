@@ -6,8 +6,9 @@ export function publishPaginated({
   customCollectionName,
   countsCollectionName,
   getAdditionalFields,
-  getSelector,
-  getOptions,
+  // Default functions may be overwritten
+  getSelector = selector => selector,
+  getOptions = options => options,
 }) {
   return Meteor.publish(name, function (params) {
     const {
@@ -31,6 +32,8 @@ export function publishPaginated({
     if (sort) options.sort = sort;
     if (skip) options.skip = skip;
     if (fields) options.fields = fields;
+
+    // ???
     if (transform) options.transform = transform;
     if (typeof reactive !== 'undefined') options.reactive = reactive;
 
@@ -39,8 +42,6 @@ export function publishPaginated({
     const cursor = collection.find(selector, options);
 
     const countsName = countsCollectionName || name + '.count';
-
-    console.log(options);
 
     publishCount(this, countsName, collection.find(selector, { ...options, limit: 0, fields: { _id: 1 } }));
 
