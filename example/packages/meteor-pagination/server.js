@@ -1,7 +1,5 @@
 import { publishCount } from 'meteor/tmeasday:publish-counts';
 
-console.log(publishCount);
-
 export function publishPaginated({
   name,
   collection,
@@ -41,6 +39,8 @@ export function publishPaginated({
     const cursor = collection.find(selector, options);
 
     const countsName = countsCollectionName || name + '.count';
+
+    console.log(options);
 
     publishCount(this, countsName, collection.find(selector, { ...options, limit: 0, fields: { _id: 1 } }));
 

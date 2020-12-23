@@ -24,16 +24,21 @@ const columns = [
     name: "Content",
     selector: "content",
     sortable: false,
-    width: 500,
-    wrap: true,
+    selector: (row, index) =>
+      row?.content?.length > 30
+        ? row.content.slice(0, 30) + "..."
+        : row.content,
   },
 ];
 
-const Table = ({ posts, postsLoading, onChangePage, onChangeRowsPerPage, totalRows }) => {
-  useEffect(() => {
-    console.log("effect");
-  });
-
+const Table = ({
+  posts,
+  postsLoading,
+  onChangePage,
+  onChangeRowsPerPage,
+  totalRows,
+  onSort,
+}) => {
   const fetchUsers = async (page) => {
     setLoading(true);
 
@@ -66,14 +71,13 @@ const Table = ({ posts, postsLoading, onChangePage, onChangeRowsPerPage, totalRo
       selectableRows
       onChangeRowsPerPage={onChangeRowsPerPage}
       onChangePage={onChangePage}
+      onSort={onSort}
     />
   );
 };
 
-export default withTracker(({ perPage, page }) => {
-  console.log({ perPage, page });
-
-  const totalRows = Counts.get('posts.paginated.count');
+export default withTracker(({ perPage, page, sort }) => {
+  const totalRows = Counts.get("posts.paginated.count");
 
   const paginatedPostsSub = Meteor.subscribe("posts.paginated", {
     skip: page * perPage,
@@ -81,12 +85,13 @@ export default withTracker(({ perPage, page }) => {
     fields: {
       title: 1,
       content: 1,
-    }
+    },
+    sort
   });
 
   return {
     postsLoading: !paginatedPostsSub.ready(),
     posts: PostsPaginated.find().fetch(),
-    totalRows
+    totalRows,
   };
 })(Table);

@@ -9,6 +9,7 @@ const App = () => {
   const [totalRows, setTotalRows] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [sort, setSort] = useState(undefined);
 
   const handlePageChange = page => {
     setPage(page - 1);
@@ -19,6 +20,10 @@ const App = () => {
     setPage(page);
   };
 
+  const handleSort = (column, sortDirection) => {
+    setSort({ [column.selector]: sortDirection === 'asc' ? 1 : -1 });
+  };
+
   return (
     <div>
       <Table
@@ -26,6 +31,8 @@ const App = () => {
         perPage={perPage}
         onChangeRowsPerPage={handleRowsPerPageChange}
         page={page}
+        onSort={handleSort}
+        sort={sort}
       />
     </div>
   );
