@@ -1,29 +1,35 @@
-let previousParams = '';
 let previousPage = 1;
+let previousParams = {};
 
-const onlyPageHasChanged = params => {
+const onlyPageHasChanged = ({ params }) => {
   if (!params) return false;
-  const paramsToCompare = { ...params };
+
+  let result = false;
+  const paramsToCompare = JSON.parse(JSON.stringify(params));
   delete paramsToCompare.skip;
   delete paramsToCompare.page;
   delete paramsToCompare.limit;
 
-  console.log('');
-  console.log(parseInt(params.page), previousPage + 1);
+  // console.log(previousPage, parseInt(params.page));
 
   if (
     parseInt(params.page) === previousPage + 1 &&
     JSON.stringify(previousParams) === JSON.stringify(paramsToCompare)
   ) {
-    previousPage = parseInt(params.page);
-    return true;
+    // console.log('Only page has changed');
+    result = true;
   } else {
-    previousParams = { ...paramsToCompare };
-    previousSkip = params.skip;
-    previousLimit = params.limit;
-    previousPage = parseInt(params.page);
-    return false;
+    // console.log('NOT only page has changed');
+    // console.log({
+    //   pp: JSON.stringify(previousParams),
+    //   cp: JSON.stringify(paramsToCompare),
+    // })
+    previousParams = JSON.parse(JSON.stringify(paramsToCompare));
   }
+
+  previousPage = parseInt(params.page);
+
+  return result;
 };
 
 export default onlyPageHasChanged;

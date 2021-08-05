@@ -2,7 +2,7 @@
 
 const observer = function({
   self,
-  customCollectionName, 
+  customCollectionName,
   getAdditionalFields,
   page
 }) {
