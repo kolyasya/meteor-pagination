@@ -1,42 +1,51 @@
 // observe callback function
 
-const observer = function({
-  self,
+const observer = function ({
+  subscription,
   customCollectionName,
-  getAdditionalFields,
-  page
+  page,
+  addedObserverTransformer,
+  changedObserverTransformer,
+  removedObserverTransformer,
 }) {
   return {
     added: (_id, fields) => {
-      let finalFields = { ...fields };
-      if (getAdditionalFields) {
-        finalFields = getAdditionalFields({
-          _id,
-          fields,
-          eventType: 'added',
-        });
+      const finalFields =
+        typeof addedObserverTransformer === 'function'
+          ? addedObserverTransformer({
+            fields,
+            _id,
+            subscription,
+            eventType: 'added',
+          })
+          : fields;
 
-        if (!finalFields?.hasOwnProperty('pagination')) {
-          finalFields.pagination = {
-            page
-          };
-        }
+      if (!finalFields?.hasOwnProperty('pagination')) {
+        finalFields.pagination = {
+          page,
+        };
       }
-      self.added(customCollectionName, _id, finalFields);
+
+      subscription.added(customCollectionName, _id, finalFields);
     },
     changed: (_id, fields) => {
-      let finalFields = { ...fields };
-      if (getAdditionalFields) {
-        finalFields = getAdditionalFields({
-          _id,
-          fields,
-          eventType: 'changed',
-        });
-      }
-      self.changed(customCollectionName, _id, finalFields);
+      const finalFields =
+        typeof changedObserverTransformer === 'function'
+          ? changedObserverTransformer({
+            fields,
+            _id,
+            subscription,
+            eventType: 'changed',
+          })
+          : fields;
+
+      subscription.changed(customCollectionName, _id, finalFields);
     },
     removed: _id => {
-      self.removed(customCollectionName, _id);
+      if (typeof removedObserverTransformer === 'function') {
+        removedObserverTransformer({ _id, subscription, eventType: 'removed' });
+      }
+      subscription.removed(customCollectionName, _id);
     },
   };
 };
