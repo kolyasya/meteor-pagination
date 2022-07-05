@@ -63,9 +63,9 @@ export function publishPaginated({
     const subscription = this;
 
     const {
-      limit,
+      limit = 10,
       sort = false,
-      skip = false,
+      skip = 0,
       reactive,
       fields,
       transform,
@@ -78,7 +78,7 @@ export function publishPaginated({
     } = params || {};
 
     if (!params.page) {
-      params.page = '1';
+      params.page = 1;
     }
 
     // console.log('');
