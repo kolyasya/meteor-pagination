@@ -42,7 +42,7 @@ export function publishPaginated({
   reactiveCountLimit = 1000,
   publishCountsOptions = {
     // 10 seconds by default
-    pullingInterval: 10 * 1000
+    pullingInterval: 10 * 1000,
   },
 
   getAdditionalFields,
@@ -124,7 +124,6 @@ export function publishPaginated({
     const countsName = countsCollectionName || name + '.count';
 
     const countCursor = collection.find(selector, {
-      ...options,
       limit: 0,
       fields: { _id: 1 },
     });
