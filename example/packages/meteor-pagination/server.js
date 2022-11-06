@@ -124,7 +124,7 @@ export function publishPaginated({
     const countsName = countsCollectionName || name + '.count';
 
     const countCursor = collection.find(selector, {
-      limit: 0,
+      limit: undefined,
       fields: { _id: 1 },
     });
 
