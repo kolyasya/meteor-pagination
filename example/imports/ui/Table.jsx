@@ -61,7 +61,7 @@ const Table = ({
 
   return (
     <DataTable
-      title="Users"
+      title="Posts"
       columns={columns}
       data={posts}
       progressPending={postsLoading}
@@ -86,7 +86,13 @@ export default withTracker(({ perPage, page, sort }) => {
       title: 1,
       content: 1,
     },
-    sort
+    sort,
+
+    cursorSelector: {
+      customFieldToFilter: 'custom-field-to-filter',
+    },
+
+    shouldLeadToParamsWarning: true
   });
 
   return {

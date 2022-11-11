@@ -6,6 +6,11 @@ Package.describe({
   documentation: 'README.md',
 });
 
+Npm.depends({
+  'lodash.defaults': '4.2.0',
+  'lodash.pullall': '4.2.0'
+})
+
 Package.onUse(function (api) {
   api.versionsFrom('1.6.0.1');
 

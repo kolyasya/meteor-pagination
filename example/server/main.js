@@ -8,4 +8,14 @@ publishPaginated({
   name: 'posts.paginated',
   customCollectionName: 'posts.paginated',
   countsCollectionName: 'posts.paginated.count',
+
+  getSelector: params => {
+    console.log('Selector', params);
+
+    return {};
+  },
+
+  getOptions: params => {
+    console.log('Options', params)
+  }
 });

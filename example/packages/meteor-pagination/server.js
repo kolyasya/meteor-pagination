@@ -3,6 +3,8 @@ import { publishCount } from 'meteor/btafel:publish-counts';
 import observer from './observer';
 import handleKeepPreloaded from './handleKeepPreloaded';
 
+import getParams from './getParams';
+
 /**
  * @param {Object} params
  * @param {string} params.name Meteor publication name
@@ -57,29 +59,14 @@ export function publishPaginated({
     throw new Meteor.Error(`reactiveCountLimit option must be > 0`);
   }
 
-  return Meteor.publish(name, function (params) {
+  return Meteor.publish(name, function (_params) {
     // Save into subscription variable
     // to make it easier to understand code below
     const subscription = this;
 
-    const {
-      limit = 10,
-      sort = false,
-      skip = 0,
-      reactive,
-      fields,
-      transform,
-      disableOplog,
-      pollingIntervalMs,
-      pollingThrottleMs,
-      maxTimeMs,
-      hint,
-      ...filters
-    } = params || {};
 
-    if (!params.page) {
-      params.page = 1;
-    }
+    const params = getParams(_params);
+
 
     // console.log('');
     // console.log('');
@@ -88,17 +75,17 @@ export function publishPaginated({
 
     let options = getOptions(params) || {};
 
-    if (limit >= 0) {
-      options.limit = limit;
+    if (params.limit >= 0) {
+      options.limit = params.limit;
     }
-    if (skip >= 0) {
-      options.skip = skip;
+    if (params.skip >= 0) {
+      options.skip = params.skip;
     }
-    if (sort) {
-      options.sort = sort;
+    if (params.sort) {
+      options.sort = params.sort;
     }
-    if (fields) {
-      options.fields = fields;
+    if (params.fields) {
+      options.fields = params.fields;
     }
 
     if (keepPreloaded) {
@@ -108,14 +95,14 @@ export function publishPaginated({
       });
     }
 
-    if (transform) {
-      options.transform = transform;
+    if (params.transform) {
+      options.transform = params.transform;
     }
-    if (typeof reactive !== 'undefined') {
-      options.reactive = reactive;
+    if (typeof params.reactive !== 'undefined') {
+      options.reactive = params.reactive;
     }
 
-    const selector = getSelector(filters);
+    const selector = getSelector(params.cursorSelector);
 
     const cursor = collection.find(selector, {
       ...options,
@@ -136,7 +123,7 @@ export function publishPaginated({
 
     publishCount(subscription, countsName, countCursor, publishCountsOptions);
 
-    const page = Math.round(skip / limit) + 1;
+    const page = Math.round(params.skip / params.limit) + 1;
 
     const handle = cursor.observeChanges(
       observer({
