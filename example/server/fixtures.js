@@ -12,7 +12,7 @@ Meteor.startup(() => {
     console.log('Inserting fixtures to Posts collection...');
     const jabber = new Jabber();
 
-    for (let i = 0; i < 999; i++) {
+    for (let i = 0; i < 91; i++) {
       insertPost({
         title: `${jabber.createWord(6, true)} ${jabber.createWord(8)}`,
         content: jabber.createParagraph(90)

@@ -88,11 +88,9 @@ export default withTracker(({ perPage, page, sort }) => {
     },
     sort,
 
-    cursorSelector: {
-      customFieldToFilter: 'custom-field-to-filter',
-    },
+    cursorSelector: {},
 
-    shouldLeadToParamsWarning: true
+    shouldLeadToParamsWarning: true,
   });
 
   return {

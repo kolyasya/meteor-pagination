@@ -1,21 +1,19 @@
-import './fixtures';
-import { publishPaginated } from 'meteor/kolyasya:meteor-pagination';
+import "./fixtures";
+import { publishPaginated } from "meteor/kolyasya:meteor-pagination";
 
-import Posts from '/imports/api/posts';
+import Posts from "/imports/api/posts";
 
 publishPaginated({
   collection: Posts,
-  name: 'posts.paginated',
-  customCollectionName: 'posts.paginated',
-  countsCollectionName: 'posts.paginated.count',
+  name: "posts.paginated",
+  customCollectionName: "posts.paginated",
+  countsCollectionName: "posts.paginated.count",
 
-  getSelector: params => {
-    console.log('Selector', params);
+  unknownParam: true,
 
+  transformCursorOptions: ({ subscriptionParams, paginationParams }) => {
     return {};
   },
 
-  getOptions: params => {
-    console.log('Options', params)
-  }
+  transformCursorSelector: ({ subscriptionParams, paginationParams }) => ({}),
 });

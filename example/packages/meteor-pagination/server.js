@@ -1,138 +1,141 @@
-import { publishCount } from 'meteor/btafel:publish-counts';
+import { publishCount } from "meteor/btafel:publish-counts";
+import defaults from "lodash.defaults";
 
-import observer from './observer';
-import handleKeepPreloaded from './handleKeepPreloaded';
+import observer from "./observer";
 
-import getParams from './getParams';
+import getSubscriptionParams from "./getSubscriptionParams";
+import getCursorOptions from "./getCursorOptions";
+import checkUnsupportedParams from "./checkUnsupportedParams";
 
-/**
- * @param {Object} params
- * @param {string} params.name Meteor publication name
- * @param {Object} params.collection Meteor Mongo collection instance
- * @param {string} params.customCollectionName
- * @param {string} params.countsCollectionName
- *
- * @param {boolean} [params.keepPreloaded=true]
- *
- * @param {function} [params.getSelector]
- * @param {function} [params.getOptions]
- *
- * @param {function} [params.addedObserverTransformer]
- * @param {function} [params.changedObserverTransformer]
- * @param {function} [params.removedObserverTransformer]
- *
- * @param {number} [params.reactiveCountLimit] A number of documents when reactive count will be changed to periodical request. Use it to fix perfomance
- * @param {Object} [params.publishCountsOptions] options to pass to btafel:publish-counts
- * @param {Object} [params.publishCountsOptions.pullingInterval] 
- *
- * @return {function}
- */
-export function publishPaginated({
-  name,
-  collection,
-  customCollectionName,
-  countsCollectionName,
-  keepPreloaded = false,
-  // Default functions may be overwritten
-  getSelector = selector => selector,
-  getOptions = options => options,
+const defaultPaginationParams = {
+  name: undefined,
+  collection: undefined,
+  customCollectionName: undefined,
+  countsCollectionName: undefined,
+  keepPreloaded: false,
 
-  addedObserverTransformer,
-  changedObserverTransformer,
-  removedObserverTransformer,
+  transformCursorSelector: undefined,
+  transformCursorOptions: undefined,
 
-  reactiveCountLimit = 1000,
-  publishCountsOptions = {
+  addedObserverTransformer: undefined,
+  changedObserverTransformer: undefined,
+  removedObserverTransformer: undefined,
+
+  // Defines how many documents will be counted reactively
+  // Because Counts package may be slow on huge amounts of data
+  reactiveCountLimit: 1000,
+  publishCountsOptions: {
     // 10 seconds by default
     pullingInterval: 10 * 1000,
   },
 
-  getAdditionalFields,
-}) {
-  if (getAdditionalFields) {
+  getAdditionalFields: undefined,
+};
+
+/**
+ * @param {Object} paginationParams
+ * @param {string} paginationParams.name Meteor publication name
+ * @param {Object} paginationParams.collection Meteor Mongo collection instance
+ * @param {string} paginationParams.customCollectionName
+ * @param {string} paginationParams.countsCollectionName
+ *
+ * @param {boolean} [paginationParams.keepPreloaded = true]
+ *
+ * @param {function} [paginationParams.transformCursorSelector]
+ * @param {function} [paginationParams.transformCursorOptions]
+ *
+ * @param {function} [paginationParams.addedObserverTransformer]
+ * @param {function} [paginationParams.changedObserverTransformer]
+ * @param {function} [paginationParams.removedObserverTransformer]
+ *
+ * @param {number} [paginationParams.reactiveCountLimit] A number of documents when reactive count will be changed to periodical request. Use it to fix perfomance
+ * @param {Object} [paginationParams.publishCountsOptions] options to pass to btafel:publish-counts
+ * @param {Object} [paginationParams.publishCountsOptions.pullingInterval]
+ *
+ * @return {function}
+ */
+export function publishPaginated(_paginationParams = {}) {
+  checkUnsupportedParams({
+    params: _paginationParams,
+    defaultParams: defaultPaginationParams,
+    onUnsupportedParams: ({ unsupportedParams }) => {
+      console.warn(
+        "Meteor-pagination: you are passing params, which are not supported by the package settings"
+      );
+      console.log("Unsupported params:", unsupportedParams);
+    },
+  });
+
+  const paginationParams = defaults(_paginationParams, defaultPaginationParams);
+
+  if (paginationParams.getAdditionalFields) {
     throw new Meteor.Error(
-      'Usage of getAdditionalFields in kolyasya:meteor-pagination is deprecated. Replace the method with addedObserverTransformer, changedObserverTransformer or removedObserverTransformer'
+      "Usage of getAdditionalFields in kolyasya:meteor-pagination is deprecated. Replace the method with addedObserverTransformer, changedObserverTransformer or removedObserverTransformer"
     );
   }
 
-  if (reactiveCountLimit < 0) {
+  if (paginationParams.reactiveCountLimit < 0) {
     throw new Meteor.Error(`reactiveCountLimit option must be > 0`);
   }
 
-  return Meteor.publish(name, function (_params) {
+  return Meteor.publish(paginationParams.name, function (_subscriptionParams) {
     // Save into subscription variable
     // to make it easier to understand code below
     const subscription = this;
 
+    const subscriptionParams = getSubscriptionParams(_subscriptionParams);
 
-    const params = getParams(_params);
-
-
-    // console.log('');
-    // console.log('');
-    // console.log('PAGINATED PUBLICATION');
-    // console.log('');
-
-    let options = getOptions(params) || {};
-
-    if (params.limit >= 0) {
-      options.limit = params.limit;
-    }
-    if (params.skip >= 0) {
-      options.skip = params.skip;
-    }
-    if (params.sort) {
-      options.sort = params.sort;
-    }
-    if (params.fields) {
-      options.fields = params.fields;
-    }
-
-    if (keepPreloaded) {
-      options = handleKeepPreloaded({
-        options,
-        params,
-      });
-    }
-
-    if (params.transform) {
-      options.transform = params.transform;
-    }
-    if (typeof params.reactive !== 'undefined') {
-      options.reactive = params.reactive;
-    }
-
-    const selector = getSelector(params.cursorSelector);
-
-    const cursor = collection.find(selector, {
-      ...options,
+    const cursorOptions = getCursorOptions({
+      paginationParams,
+      subscriptionParams,
     });
 
-    const countsName = countsCollectionName || name + '.count';
+    const selector =
+      typeof transformCursorSelector === "function"
+        ? paginationParams.transformCursorSelector({
+            subscriptionParams,
+            paginationParams,
+          })
+        : subscriptionParams.cursorSelector;
 
-    const countCursor = collection.find(selector, {
+
+    console.log({ selector })
+    console.log({ cursorOptions })
+
+    const cursor = paginationParams.collection.find(selector, cursorOptions);
+
+    const countsName =
+      paginationParams.countsCollectionName || paginationParams.name + ".count";
+
+    const countCursor = paginationParams.collection.find(selector, {
       limit: undefined,
       fields: { _id: 1 },
     });
 
     const currentCount = countCursor.count();
 
-    if (currentCount < reactiveCountLimit) {
-      delete publishCountsOptions.pullingInterval;
+    if (currentCount < paginationParams.reactiveCountLimit) {
+      delete paginationParams.publishCountsOptions.pullingInterval;
     }
 
-    publishCount(subscription, countsName, countCursor, publishCountsOptions);
+    publishCount(
+      subscription,
+      countsName,
+      countCursor,
+      paginationParams.publishCountsOptions
+    );
 
-    const page = Math.round(params.skip / params.limit) + 1;
+    const page =
+      Math.round(subscriptionParams.skip / subscriptionParams.limit) + 1;
 
     const handle = cursor.observeChanges(
       observer({
         subscription,
-        customCollectionName,
+        customCollectionName: paginationParams.customCollectionName,
         page,
-        addedObserverTransformer,
-        changedObserverTransformer,
-        removedObserverTransformer,
+        addedObserverTransformer: paginationParams.addedObserverTransformer,
+        changedObserverTransformer: paginationParams.changedObserverTransformer,
+        removedObserverTransformer: paginationParams.removedObserverTransformer,
       })
     );
 
