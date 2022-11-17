@@ -12,7 +12,6 @@ const defaultPaginationParams = {
   collection: undefined,
   customCollectionName: undefined,
   countsCollectionName: undefined,
-  keepPreloaded: false,
 
   transformCursorSelector: undefined,
   transformCursorOptions: undefined,
@@ -29,32 +28,57 @@ const defaultPaginationParams = {
     pullingInterval: 10 * 1000,
   },
 
-  getAdditionalFields: undefined,
+  keepPreloaded: false,
 };
 
 /**
  * @param {Object} paginationParams
  * @param {string} paginationParams.name Meteor publication name
  * @param {Object} paginationParams.collection Meteor Mongo collection instance
- * @param {string} paginationParams.customCollectionName
- * @param {string} paginationParams.countsCollectionName
+ * @param {string} paginationParams.customCollectionName Name of client-side collection to publish results to ex. "documents.paginated"
  *
- * @param {boolean} [paginationParams.keepPreloaded = true]
+ * @param {string} [paginationParams.countsCollectionName]
  *
- * @param {function} [paginationParams.transformCursorSelector]
- * @param {function} [paginationParams.transformCursorOptions]
  *
- * @param {function} [paginationParams.addedObserverTransformer]
- * @param {function} [paginationParams.changedObserverTransformer]
- * @param {function} [paginationParams.removedObserverTransformer]
+ * @param {function} [paginationParams.transformCursorSelector] Function to change mongo cursor selector on the fly
+ * @param {function} [paginationParams.transformCursorOptions] Function to change mongo cursor options on the fly
+ *
+ * For better understanding of this part check Meteor observeChanges documentation
+ * @param {function} [paginationParams.addedObserverTransformer] Function to transform document on "added" event
+ * @param {function} [paginationParams.changedObserverTransformer] Function to transform document on "changed" event
+ * @param {function} [paginationParams.removedObserverTransformer] Function to transform document on "removed" event
  *
  * @param {number} [paginationParams.reactiveCountLimit] A number of documents when reactive count will be changed to periodical request. Use it to fix perfomance
  * @param {Object} [paginationParams.publishCountsOptions] options to pass to btafel:publish-counts
  * @param {Object} [paginationParams.publishCountsOptions.pullingInterval]
  *
+ * This is not implemented at the moment
+ * @param {boolean} [paginationParams.keepPreloaded = false]
+ *
  * @return {function}
  */
 export function publishPaginated(_paginationParams = {}) {
+  if (!_paginationParams?.name) {
+    throw new Meteor.Error(
+      "500",
+      'kolyasya:meteor-pagination: "name" param is required for publishPaginated function'
+    );
+  }
+
+  if (!_paginationParams?.collection) {
+    throw new Meteor.Error(
+      "500",
+      'kolyasya:meteor-pagination: "collection" param is required for publishPaginated function'
+    );
+  }
+
+  if (!_paginationParams?.customCollectionName) {
+    throw new Meteor.Error(
+      "500",
+      'kolyasya:meteor-pagination: "customCollectionName" param is required for publishPaginated function'
+    );
+  }
+
   checkUnsupportedParams({
     params: _paginationParams,
     defaultParams: defaultPaginationParams,
@@ -67,12 +91,6 @@ export function publishPaginated(_paginationParams = {}) {
   });
 
   const paginationParams = defaults(_paginationParams, defaultPaginationParams);
-
-  if (paginationParams.getAdditionalFields) {
-    throw new Meteor.Error(
-      "Usage of getAdditionalFields in kolyasya:meteor-pagination is deprecated. Replace the method with addedObserverTransformer, changedObserverTransformer or removedObserverTransformer"
-    );
-  }
 
   if (paginationParams.reactiveCountLimit < 0) {
     throw new Meteor.Error(`reactiveCountLimit option must be > 0`);
@@ -98,10 +116,6 @@ export function publishPaginated(_paginationParams = {}) {
           })
         : subscriptionParams.cursorSelector;
 
-
-    console.log({ selector })
-    console.log({ cursorOptions })
-
     const cursor = paginationParams.collection.find(selector, cursorOptions);
 
     const countsName =
@@ -125,14 +139,16 @@ export function publishPaginated(_paginationParams = {}) {
       paginationParams.publishCountsOptions
     );
 
+    // Will be inserted into published documents like:
+    // [{ ...documentFields, meteorPagination: { page: 1 } }]
     const page =
       Math.round(subscriptionParams.skip / subscriptionParams.limit) + 1;
 
     const handle = cursor.observeChanges(
       observer({
         subscription,
-        customCollectionName: paginationParams.customCollectionName,
         page,
+        customCollectionName: paginationParams.customCollectionName,
         addedObserverTransformer: paginationParams.addedObserverTransformer,
         changedObserverTransformer: paginationParams.changedObserverTransformer,
         removedObserverTransformer: paginationParams.removedObserverTransformer,

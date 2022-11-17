@@ -7,13 +7,5 @@ publishPaginated({
   collection: Posts,
   name: "posts.paginated",
   customCollectionName: "posts.paginated",
-  countsCollectionName: "posts.paginated.count",
-
-  unknownParam: true,
-
-  transformCursorOptions: ({ subscriptionParams, paginationParams }) => {
-    return {};
-  },
-
-  transformCursorSelector: ({ subscriptionParams, paginationParams }) => ({}),
+  countsCollectionName: "posts.paginated.count"
 });

@@ -20,8 +20,10 @@ const observer = function ({
           })
           : fields;
 
-      if (!finalFields?.hasOwnProperty('pagination')) {
-        finalFields.pagination = {
+      // For published documents we insert an object with pagination data
+      // At the moment it is only a page number
+      if (!finalFields?.hasOwnProperty('meteorPagination')) {
+        finalFields.meteorPagination = {
           page,
         };
       }
