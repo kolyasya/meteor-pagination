@@ -12,6 +12,7 @@ Npm.depends({
 });
 
 Package.onUse(function (api) {
+  api.versionsFrom('2.5.8');
   api.use("ecmascript");
   api.use("mongo");
   api.use("btafel:publish-counts@0.9.3");
