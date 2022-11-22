@@ -109,7 +109,7 @@ export function publishPaginated(_paginationParams = {}) {
     });
 
     const selector =
-      typeof transformCursorSelector === "function"
+      typeof paginationParams?.transformCursorSelector === "function"
         ? paginationParams.transformCursorSelector({
             subscriptionParams,
             paginationParams,
