@@ -1,6 +1,6 @@
 Package.describe({
   name: "kolyasya:meteor-pagination",
-  version: "0.0.1",
+  version: "0.0.4",
   summary: "Trying to make it right",
   git: "https://github.com/kolyasya/meteor-pagination",
   documentation: "README.md",
@@ -12,6 +12,7 @@ Npm.depends({
 });
 
 Package.onUse(function (api) {
+  api.versionsFrom('2.3.5');
   api.use("ecmascript");
   api.use("mongo");
   api.use("btafel:publish-counts@0.9.3");
