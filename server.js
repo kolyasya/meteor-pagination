@@ -8,6 +8,8 @@ import getCursorOptions from "./getCursorOptions";
 import checkUnsupportedParams from "./checkUnsupportedParams";
 
 const defaultPaginationParams = {
+  enableLogging: false,
+
   name: undefined,
   collection: undefined,
   customCollectionName: undefined,
@@ -33,6 +35,8 @@ const defaultPaginationParams = {
 
 /**
  * @param {Object} paginationParams
+ *
+ * @param {boolean} paginationParams.enableLogging Logs for publication functions
  * @param {string} paginationParams.name Meteor publication name
  * @param {Object} paginationParams.collection Meteor Mongo collection instance
  * @param {string} paginationParams.customCollectionName Name of client-side collection to publish results to ex. "documents.paginated"
@@ -58,6 +62,19 @@ const defaultPaginationParams = {
  * @return {function}
  */
 export function publishPaginated(_paginationParams = {}) {
+  // Custom logger
+  publishPaginatedLogger = function () {
+    if (
+      _paginationParams?.enableLogging ||
+      defaultPaginationParams?.enableLogging
+    ) {
+      console.log.apply(this, [
+        `Publish Paginated | ${_paginationParams.name} |`,
+        ...arguments,
+      ]);
+    }
+  };
+
   if (!_paginationParams?.name) {
     throw new Meteor.Error(
       "500",
@@ -86,7 +103,7 @@ export function publishPaginated(_paginationParams = {}) {
       console.warn(
         "Meteor-pagination: you are passing params, which are not supported by the package settings"
       );
-      console.log("Unsupported params:", unsupportedParams);
+      console.warn("Unsupported params:", unsupportedParams);
     },
   });
 
@@ -116,6 +133,13 @@ export function publishPaginated(_paginationParams = {}) {
           })
         : subscriptionParams.cursorSelector;
 
+    publishPaginatedLogger(
+      `Cursor\nselector\n${JSON.stringify(
+        selector,
+        null,
+        2
+      )}\noptions:\n${JSON.stringify(cursorOptions, null, 2)}`
+    );
     const cursor = paginationParams.collection.find(selector, cursorOptions);
 
     const countsName =
@@ -144,6 +168,7 @@ export function publishPaginated(_paginationParams = {}) {
     const page =
       Math.round(subscriptionParams.skip / subscriptionParams.limit) + 1;
 
+    publishPaginatedLogger('Starting observeChanges...');
     const handle = cursor.observeChanges(
       observer({
         subscription,

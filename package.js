@@ -1,7 +1,7 @@
 Package.describe({
   name: "kolyasya:meteor-pagination",
-  version: "0.0.4",
-  summary: "Meteor pagination based on publications",
+  version: "0.0.5",
+  summary: "Trying to make it right",
   git: "https://github.com/kolyasya/meteor-pagination",
   documentation: "README.md",
 });

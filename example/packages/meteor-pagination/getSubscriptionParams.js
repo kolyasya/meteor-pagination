@@ -3,6 +3,9 @@ import defaults from "lodash.defaults";
 import checkUnsupportedParams from './checkUnsupportedParams';
 
 const getSubscriptionParams = (subscriptionParams = {}) => {
+
+  publishPaginatedLogger('Getting subscription params...');
+
   const defaultParams = {
     limit: 10,
     sort: false,
@@ -30,7 +33,7 @@ const getSubscriptionParams = (subscriptionParams = {}) => {
       console.warn(
         'Meteor-pagination: you are passing params, which are not supported by the package, probably need to move them to "cursorSelector"'
       );
-      console.log("Unsupported params:", unsupportedParams);
+      console.warn("Unsupported params:", unsupportedParams);
     }
   })
 
@@ -38,6 +41,8 @@ const getSubscriptionParams = (subscriptionParams = {}) => {
   const finalParams = defaults(subscriptionParams, defaultParams);
 
   // console.dir(finalParams, { depth: null });
+
+  publishPaginatedLogger('Got subscription params\n', JSON.stringify(finalParams, null, 2));
 
   return finalParams;
 };
