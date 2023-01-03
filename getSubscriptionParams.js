@@ -2,9 +2,13 @@ import defaults from "lodash.defaults";
 
 import checkUnsupportedParams from './checkUnsupportedParams';
 
+import getPublishPaginatedLogger from "./getPublishPaginatedLogger";
+
 const getSubscriptionParams = (subscriptionParams = {}) => {
 
-  publishPaginatedLogger('Getting subscription params...');
+  const logger = getPublishPaginatedLogger();
+
+  logger('Getting subscription params...');
 
   const defaultParams = {
     limit: 10,
@@ -42,7 +46,7 @@ const getSubscriptionParams = (subscriptionParams = {}) => {
 
   // console.dir(finalParams, { depth: null });
 
-  publishPaginatedLogger('Got subscription params\n', JSON.stringify(finalParams, null, 2));
+  logger('Got subscription params\n', JSON.stringify(finalParams, null, 2));
 
   return finalParams;
 };

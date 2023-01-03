@@ -6,6 +6,7 @@ import observer from "./observer";
 import getSubscriptionParams from "./getSubscriptionParams";
 import getCursorOptions from "./getCursorOptions";
 import checkUnsupportedParams from "./checkUnsupportedParams";
+import getPublishPaginatedLogger from "./getPublishPaginatedLogger";
 
 const defaultPaginationParams = {
   enableLogging: false,
@@ -62,18 +63,10 @@ const defaultPaginationParams = {
  * @return {function}
  */
 export function publishPaginated(_paginationParams = {}) {
-  // Custom logger
-  publishPaginatedLogger = function () {
-    if (
-      _paginationParams?.enableLogging ||
-      defaultPaginationParams?.enableLogging
-    ) {
-      console.log.apply(this, [
-        `Publish Paginated | ${_paginationParams.name} |`,
-        ...arguments,
-      ]);
-    }
-  };
+  const logger = getPublishPaginatedLogger({
+    paginationParams: _paginationParams,
+    defaultPaginationParams,
+  });
 
   if (!_paginationParams?.name) {
     throw new Meteor.Error(
@@ -133,8 +126,8 @@ export function publishPaginated(_paginationParams = {}) {
           })
         : subscriptionParams.cursorSelector;
 
-    publishPaginatedLogger(
-      `Cursor\nselector\n${JSON.stringify(
+    logger(
+      `Cursor:\nselector:\n${JSON.stringify(
         selector,
         null,
         2
@@ -168,7 +161,7 @@ export function publishPaginated(_paginationParams = {}) {
     const page =
       Math.round(subscriptionParams.skip / subscriptionParams.limit) + 1;
 
-    publishPaginatedLogger('Starting observeChanges...');
+    logger("Starting observeChanges...");
     const handle = cursor.observeChanges(
       observer({
         subscription,
