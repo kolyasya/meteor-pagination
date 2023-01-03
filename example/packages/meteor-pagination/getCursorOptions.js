@@ -1,46 +1,69 @@
 import handleKeepPreloaded from "./handleKeepPreloaded";
+import getPublishPaginatedLogger from "./getPublishPaginatedLogger";
 
 const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
-  let options =
-    typeof paginationParams.transformCursorOptions === "function"
-      ? paginationParams.transformCursorOptions({
-          paginationParams,
-          subscriptionParams,
-        })
-      : {};
+  const logger = getPublishPaginatedLogger();
+  let cursorOptions = {};
 
   if (subscriptionParams.limit >= 0) {
-    options.limit = subscriptionParams.limit;
+    cursorOptions.limit = subscriptionParams.limit;
   }
 
   if (subscriptionParams.skip >= 0) {
-    options.skip = subscriptionParams.skip;
+    cursorOptions.skip = subscriptionParams.skip;
   }
 
   if (subscriptionParams.sort) {
-    options.sort = subscriptionParams.sort;
+    cursorOptions.sort = subscriptionParams.sort;
   }
 
   if (subscriptionParams.fields) {
-    options.fields = subscriptionParams.fields;
+    cursorOptions.fields = subscriptionParams.fields;
   }
 
   if (subscriptionParams.keepPreloaded) {
-    options = handleKeepPreloaded({
+    cursorOptions = handleKeepPreloaded({
       options,
       params: subscriptionParams,
     });
   }
 
   if (subscriptionParams.transform) {
-    options.transform = subscriptionParams.transform;
+    cursorOptions.transform = subscriptionParams.transform;
   }
 
   if (typeof subscriptionParams.reactive !== "undefined") {
-    options.reactive = subscriptionParams.reactive;
+    cursorOptions.reactive = subscriptionParams.reactive;
   }
 
-  return options;
+  if (typeof paginationParams.transformCursorOptions === "function") {
+    logger(
+      "Transforming cursor options with custom functio (transformCursorOptions)..."
+    );
+
+    cursorOptions = paginationParams.transformCursorOptions({
+      paginationParams,
+      subscriptionParams,
+      cursorOptions,
+    });
+
+    if (typeof cursorOptions !== "object") {
+      console.warn(
+        `"transformCursorOptions" function should return object, which will be used as Mongo Cursor options param`
+      );
+    }
+  }
+
+  if (
+    typeof cursorOptions.limit !== "number" ||
+    typeof cursorOptions.skip !== "number"
+  ) {
+    console.warn(
+      `Check cursor options limit: ${cursorOptions.limit} and skip: ${cursorOptions.skip} params. They should be numbers for pagination to work properly`
+    );
+  }
+
+  return cursorOptions;
 };
 
 export default getCursorOptions;
