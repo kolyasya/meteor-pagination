@@ -46,7 +46,7 @@ const getSubscriptionParams = (subscriptionParams = {}) => {
 
   // console.dir(finalParams, { depth: null });
 
-  logger('Got subscription params\n', JSON.stringify(finalParams, null, 2));
+  logger('Got subscription params:\n', JSON.stringify(finalParams, null, 2));
 
   return finalParams;
 };

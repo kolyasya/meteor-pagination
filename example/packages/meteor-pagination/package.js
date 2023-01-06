@@ -1,6 +1,6 @@
 Package.describe({
   name: "kolyasya:meteor-pagination",
-  version: "0.0.8",
+  version: "0.0.9",
   summary: "Trying to make it right",
   git: "https://github.com/kolyasya/meteor-pagination",
   documentation: "README.md",
