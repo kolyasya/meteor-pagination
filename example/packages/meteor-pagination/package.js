@@ -1,10 +1,9 @@
 Package.describe({
   name: 'kolyasya:meteor-pagination',
   version: '0.0.10',
-  summary:
-    'Pagination for Meteor with some additional functions. Based on observeChanges to publish to custom collections like "posts.paginated"',
+  summary: 'Pagination for Meteor. Based on observeChanges and publishCounts',
   git: 'https://github.com/kolyasya/meteor-pagination',
-  documentation: 'README.md',
+  documentation: '../../../README.md',
 });
 
 Npm.depends({
