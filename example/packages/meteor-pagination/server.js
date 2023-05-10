@@ -29,6 +29,7 @@ const defaultPaginationParams = {
   publishCountsOptions: {
     // 10 seconds by default
     pullingInterval: 10 * 1000,
+    noReady: true,
   },
 
   keepPreloaded: false,
