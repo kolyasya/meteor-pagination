@@ -1,5 +1,5 @@
-import handleKeepPreloaded from "./handleKeepPreloaded";
-import getPublishPaginatedLogger from "./getPublishPaginatedLogger";
+import handleKeepPreloaded from './handleKeepPreloaded';
+import getPublishPaginatedLogger from './getPublishPaginatedLogger';
 
 const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
   const logger = getPublishPaginatedLogger();
@@ -32,13 +32,13 @@ const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
     cursorOptions.transform = subscriptionParams.transform;
   }
 
-  if (typeof subscriptionParams.reactive !== "undefined") {
+  if (typeof subscriptionParams.reactive !== 'undefined') {
     cursorOptions.reactive = subscriptionParams.reactive;
   }
 
-  if (typeof paginationParams.transformCursorOptions === "function") {
+  if (typeof paginationParams.transformCursorOptions === 'function') {
     logger(
-      "Transforming cursor options with custom functio (transformCursorOptions)..."
+      'Transforming cursor options with custom functio (transformCursorOptions)...'
     );
 
     cursorOptions = paginationParams.transformCursorOptions({
@@ -47,7 +47,7 @@ const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
       cursorOptions,
     });
 
-    if (typeof cursorOptions !== "object") {
+    if (typeof cursorOptions !== 'object') {
       console.warn(
         `"transformCursorOptions" function should return object, which will be used as Mongo Cursor options param`
       );
@@ -55,8 +55,8 @@ const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
   }
 
   if (
-    typeof cursorOptions.limit !== "number" ||
-    typeof cursorOptions.skip !== "number"
+    typeof cursorOptions.limit !== 'number' ||
+    typeof cursorOptions.skip !== 'number'
   ) {
     console.warn(
       `Check cursor options limit: ${cursorOptions.limit} and skip: ${cursorOptions.skip} params. They should be numbers for pagination to work properly`

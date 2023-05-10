@@ -1,4 +1,4 @@
-import getPublishPaginatedLogger from "./getPublishPaginatedLogger";
+import getPublishPaginatedLogger from './getPublishPaginatedLogger';
 
 // observe callback function
 const observer = function ({
@@ -17,11 +17,11 @@ const observer = function ({
       const finalFields =
         typeof addedObserverTransformer === 'function'
           ? addedObserverTransformer({
-            fields,
-            _id,
-            subscription,
-            eventType: 'added',
-          })
+              fields,
+              _id,
+              subscription,
+              eventType: 'added',
+            })
           : fields;
 
       // For published documents we insert an object with pagination data
@@ -39,16 +39,16 @@ const observer = function ({
       const finalFields =
         typeof changedObserverTransformer === 'function'
           ? changedObserverTransformer({
-            fields,
-            _id,
-            subscription,
-            eventType: 'changed',
-          })
+              fields,
+              _id,
+              subscription,
+              eventType: 'changed',
+            })
           : fields;
 
       subscription.changed(customCollectionName, _id, finalFields);
     },
-    removed: _id => {
+    removed: (_id) => {
       logger(`Observer removed: ${_id}`);
       if (typeof removedObserverTransformer === 'function') {
         removedObserverTransformer({ _id, subscription, eventType: 'removed' });

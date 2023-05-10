@@ -16,7 +16,7 @@ const getPublishPaginatedLogger = function ({
         ]);
       }
     };
-    loggerInstance("Logger init successful");
+    loggerInstance('Logger init successful');
   }
   return loggerInstance;
 };

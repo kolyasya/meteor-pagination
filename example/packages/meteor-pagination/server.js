@@ -1,12 +1,12 @@
-import { publishCount } from "meteor/btafel:publish-counts";
-import defaults from "lodash.defaults";
+import { publishCount } from 'meteor/btafel:publish-counts';
+import defaults from 'lodash.defaults';
 
-import observer from "./observer";
+import observer from './observer';
 
-import getSubscriptionParams from "./getSubscriptionParams";
-import getCursorOptions from "./getCursorOptions";
-import checkUnsupportedParams from "./checkUnsupportedParams";
-import getPublishPaginatedLogger from "./getPublishPaginatedLogger";
+import getSubscriptionParams from './getSubscriptionParams';
+import getCursorOptions from './getCursorOptions';
+import checkUnsupportedParams from './checkUnsupportedParams';
+import getPublishPaginatedLogger from './getPublishPaginatedLogger';
 
 const defaultPaginationParams = {
   enableLogging: false,
@@ -70,21 +70,21 @@ export function publishPaginated(_paginationParams = {}) {
 
   if (!_paginationParams?.name) {
     throw new Meteor.Error(
-      "500",
+      '500',
       'kolyasya:meteor-pagination: "name" param is required for publishPaginated function'
     );
   }
 
   if (!_paginationParams?.collection) {
     throw new Meteor.Error(
-      "500",
+      '500',
       'kolyasya:meteor-pagination: "collection" param is required for publishPaginated function'
     );
   }
 
   if (!_paginationParams?.customCollectionName) {
     throw new Meteor.Error(
-      "500",
+      '500',
       'kolyasya:meteor-pagination: "customCollectionName" param is required for publishPaginated function'
     );
   }
@@ -94,9 +94,9 @@ export function publishPaginated(_paginationParams = {}) {
     defaultParams: defaultPaginationParams,
     onUnsupportedParams: ({ unsupportedParams }) => {
       console.warn(
-        "Meteor-pagination: you are passing params, which are not supported by the package settings"
+        'Meteor-pagination: you are passing params, which are not supported by the package settings'
       );
-      console.warn("Unsupported params:", unsupportedParams);
+      console.warn('Unsupported params:', unsupportedParams);
     },
   });
 
@@ -119,7 +119,7 @@ export function publishPaginated(_paginationParams = {}) {
     });
 
     const selector =
-      typeof paginationParams?.transformCursorSelector === "function"
+      typeof paginationParams?.transformCursorSelector === 'function'
         ? paginationParams.transformCursorSelector({
             subscriptionParams,
             paginationParams,
@@ -136,7 +136,7 @@ export function publishPaginated(_paginationParams = {}) {
     const cursor = paginationParams.collection.find(selector, cursorOptions);
 
     const countsName =
-      paginationParams.countsCollectionName || paginationParams.name + ".count";
+      paginationParams.countsCollectionName || paginationParams.name + '.count';
 
     const countCursor = paginationParams.collection.find(selector, {
       limit: undefined,
@@ -163,7 +163,7 @@ export function publishPaginated(_paginationParams = {}) {
 
     logger(`Page ${page}, results number: ${cursor.count()}`);
 
-    logger("Starting observeChanges...");
+    logger('Starting observeChanges...');
     const handle = cursor.observeChanges(
       observer({
         subscription,

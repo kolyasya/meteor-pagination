@@ -5,10 +5,10 @@ let previousSkip = 0;
 let previousLimit = 0;
 
 const handleKeepPreloaded = ({ options, params }) => {
-
   let result = { ...options };
 
-  const paramsAreTheSame = JSON.stringify(previousParams) === JSON.stringify(params);
+  const paramsAreTheSame =
+    JSON.stringify(previousParams) === JSON.stringify(params);
 
   // console.log('Keeping...');
   // console.log({
