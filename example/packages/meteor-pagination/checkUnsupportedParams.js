@@ -19,7 +19,7 @@ const checkUnsupportedParams = ({
     if (typeof onUnsupportedParams === 'function') {
       onUnsupportedParams({ unsupportedParams });
     } else {
-      console.warning(`Unsupported params: ${unsupportedParams}`);
+      console.warn(`Unsupported params: ${unsupportedParams}`);
     }
   }
 
