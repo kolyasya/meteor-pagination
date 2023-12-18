@@ -1,12 +1,12 @@
 import { publishCount } from 'meteor/btafel:publish-counts';
 import defaults from 'lodash.defaults';
 
-import observer from './observer';
+import { observer } from './utils/observer';
 
-import getSubscriptionParams from './getSubscriptionParams';
-import getCursorOptions from './getCursorOptions';
-import checkUnsupportedParams from './checkUnsupportedParams';
-import getPublishPaginatedLogger from './getPublishPaginatedLogger';
+import { getSubscriptionParams } from './utils/getSubscriptionParams';
+import { getCursorOptions } from './utils/getCursorOptions';
+import { checkUnsupportedParams } from './utils/checkUnsupportedParams';
+import { getPublishPaginatedLogger } from './utils/getPublishPaginatedLogger';
 
 const defaultPaginationParams = {
   enableLogging: false,

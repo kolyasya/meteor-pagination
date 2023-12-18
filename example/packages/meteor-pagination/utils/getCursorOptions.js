@@ -1,7 +1,7 @@
-import handleKeepPreloaded from './handleKeepPreloaded';
-import getPublishPaginatedLogger from './getPublishPaginatedLogger';
+import { handleKeepPreloaded } from './handleKeepPreloaded';
+import { getPublishPaginatedLogger } from './getPublishPaginatedLogger';
 
-const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
+export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
   const logger = getPublishPaginatedLogger();
   let cursorOptions = {};
 
@@ -65,5 +65,3 @@ const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
 
   return cursorOptions;
 };
-
-export default getCursorOptions;

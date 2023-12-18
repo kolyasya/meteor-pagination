@@ -1,7 +1,7 @@
-import getPublishPaginatedLogger from './getPublishPaginatedLogger';
+import { getPublishPaginatedLogger } from './getPublishPaginatedLogger';
 
 // observe callback function
-const observer = function ({
+export const observer = function ({
   subscription,
   customCollectionName,
   page,
@@ -57,5 +57,3 @@ const observer = function ({
     },
   };
 };
-
-export default observer;

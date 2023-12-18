@@ -1,10 +1,10 @@
-import onlyPageHasChanged from './onlyPageHasChanged';
+import { onlyPageHasChanged } from './onlyPageHasChanged';
 
 let previousParams = {};
 let previousSkip = 0;
 let previousLimit = 0;
 
-const handleKeepPreloaded = ({ options, params }) => {
+export const handleKeepPreloaded = ({ options, params }) => {
   let result = { ...options };
 
   const paramsAreTheSame =
@@ -37,5 +37,3 @@ const handleKeepPreloaded = ({ options, params }) => {
 
   return result;
 };
-
-export default handleKeepPreloaded;

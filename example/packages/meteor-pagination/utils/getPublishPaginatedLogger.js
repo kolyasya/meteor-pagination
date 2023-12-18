@@ -1,6 +1,6 @@
 let loggerInstance = undefined;
 
-const getPublishPaginatedLogger = function ({
+export const getPublishPaginatedLogger = function ({
   paginationParams,
   defaultPaginationParams,
 } = {}) {
@@ -21,4 +21,3 @@ const getPublishPaginatedLogger = function ({
   return loggerInstance;
 };
 
-export default getPublishPaginatedLogger;

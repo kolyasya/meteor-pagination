@@ -1,10 +1,10 @@
 import defaults from 'lodash.defaults';
 
-import checkUnsupportedParams from './checkUnsupportedParams';
+import { checkUnsupportedParams } from './checkUnsupportedParams';
 
-import getPublishPaginatedLogger from './getPublishPaginatedLogger';
+import { getPublishPaginatedLogger } from './getPublishPaginatedLogger';
 
-const getSubscriptionParams = (subscriptionParams = {}) => {
+export const getSubscriptionParams = (subscriptionParams = {}) => {
   const logger = getPublishPaginatedLogger();
 
   logger('Getting subscription params...');
@@ -49,5 +49,3 @@ const getSubscriptionParams = (subscriptionParams = {}) => {
 
   return finalParams;
 };
-
-export default getSubscriptionParams;

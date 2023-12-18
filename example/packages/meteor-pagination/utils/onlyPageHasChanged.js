@@ -1,7 +1,7 @@
 let previousPage = 1;
 let previousParams = {};
 
-const onlyPageHasChanged = ({ params }) => {
+export const onlyPageHasChanged = ({ params }) => {
   if (!params) return false;
 
   let result = false;
@@ -32,4 +32,3 @@ const onlyPageHasChanged = ({ params }) => {
   return result;
 };
 
-export default onlyPageHasChanged;

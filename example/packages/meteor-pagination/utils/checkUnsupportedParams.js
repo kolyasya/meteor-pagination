@@ -1,7 +1,7 @@
 import pullall from 'lodash.pullall';
-import getPublishPaginatedLogger from './getPublishPaginatedLogger';
+import { getPublishPaginatedLogger } from './getPublishPaginatedLogger';
 
-const checkUnsupportedParams = ({
+export const checkUnsupportedParams = ({
   params,
   defaultParams,
   onUnsupportedParams,
@@ -25,5 +25,3 @@ const checkUnsupportedParams = ({
 
   logger('Checked unsupported params!');
 };
-
-export default checkUnsupportedParams;
