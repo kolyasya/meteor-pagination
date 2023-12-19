@@ -1,3 +1,5 @@
+/// <reference path="./types.d.ts" />
+
 import { publishCount } from 'meteor/btafel:publish-counts';
 import defaults from 'lodash.defaults';
 
