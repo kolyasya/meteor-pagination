@@ -8,7 +8,8 @@ import { observer } from './utils/observer';
 import { getSubscriptionParams } from './utils/getSubscriptionParams';
 import { getCursorOptions } from './utils/getCursorOptions';
 import { checkUnsupportedParams } from './utils/checkUnsupportedParams';
-import { getPublishPaginatedLogger } from './utils/getPublishPaginatedLogger';
+
+import { PackageLogger } from './package-utils';
 
 const defaultPaginationParams = {
   enableLogging: false,
@@ -66,9 +67,11 @@ const defaultPaginationParams = {
  * @return {function}
  */
 export function publishPaginated(_paginationParams = {}) {
-  const logger = getPublishPaginatedLogger({
-    paginationParams: _paginationParams,
-    defaultPaginationParams,
+  const logger = PackageLogger({
+    enableLogging:
+      _paginationParams?.enableLogging ||
+      defaultPaginationParams?.enableLogging,
+    logPrefix: `Publish Paginated | ${_paginationParams.name} |`,
   });
 
   if (!_paginationParams?.name) {
