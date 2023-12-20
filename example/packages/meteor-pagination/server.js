@@ -132,7 +132,7 @@ export function publishPaginated(_paginationParams = {}) {
           })
         : subscriptionParams.cursorSelector;
 
-    logger(
+    logger.log(
       `Cursor:\nselector:\n${JSON.stringify(
         selector,
         null,
@@ -167,9 +167,9 @@ export function publishPaginated(_paginationParams = {}) {
     const page =
       Math.round(subscriptionParams.skip / subscriptionParams.limit) + 1;
 
-    logger(`Page ${page}, results number: ${cursor.count()}`);
+    logger.log(`Page ${page}, results number: ${cursor.count()}`);
 
-    logger('Starting observeChanges...');
+    logger.log('Starting observeChanges...');
     const handle = cursor.observeChanges(
       observer({
         subscription,
