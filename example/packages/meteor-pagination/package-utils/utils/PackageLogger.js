@@ -2,6 +2,8 @@
 let loggerInstance;
 
 /**
+ * Overrides default console .log and .error messages to insert `prefix`
+ * So any message will be printed like: `${logPrefix}` + `message`
  * @type {PackageLogger}
  * @return {PackageLoggerInstance}
  * */
