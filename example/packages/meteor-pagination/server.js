@@ -7,9 +7,8 @@ import { observer } from './utils/observer';
 
 import { getSubscriptionParams } from './utils/getSubscriptionParams';
 import { getCursorOptions } from './utils/getCursorOptions';
-import { checkUnsupportedParams } from './utils/checkUnsupportedParams';
 
-import { PackageLogger } from './package-utils';
+import { PackageLogger, checkUnsupportedParams } from './package-utils';
 
 const defaultPaginationParams = {
   enableLogging: false,
@@ -98,11 +97,12 @@ export function publishPaginated(_paginationParams = {}) {
   checkUnsupportedParams({
     params: _paginationParams,
     defaultParams: defaultPaginationParams,
+    logger,
     onUnsupportedParams: ({ unsupportedParams }) => {
-      console.warn(
+      logger.warn(
         'Meteor-pagination: you are passing params, which are not supported by the package settings'
       );
-      console.warn('Unsupported params:', unsupportedParams);
+      logger.warn('Unsupported params:', unsupportedParams);
     },
   });
 
