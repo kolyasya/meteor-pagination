@@ -20,7 +20,7 @@ checkNpmVersions(
   'kolyasya:meteor-pagination'
 );
 
-console.log('TODO: Update readme to install deps');
+console.log('TODO: Update Readme.md to install deps');
 
 const defaultPaginationParams = {
   enableLogging: false,
