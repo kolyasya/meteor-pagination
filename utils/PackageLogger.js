@@ -22,6 +22,10 @@ export const PackageLogger = ({
       error: function () {
         console.error.apply(this, [logPrefix, ...arguments]);
       },
+
+      warn: function () {
+        console.warn.apply(this, [logPrefix, ...arguments]);
+      },
     };
 
     loggerInstance.log('PackageLogger inited successfully');
