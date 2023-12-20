@@ -1,5 +1,7 @@
 import pullall from 'lodash.pullall';
 
+import { isObject } from './isObject';
+
 /**
  * Checks if some params passed to a package is not supported
  * Works by comparison with set of default params
@@ -16,6 +18,10 @@ export const checkUnsupportedParams = ({
   }
 
   logger.log('Checking unsupported params...');
+
+  if (!params || !defaultParams || !isObject(params) || !isObject(defaultParams)) {
+    return logger.error(`Can't check unsupported params. You need params and defaultParams to be objects.`);
+  }
 
   const unsupportedParams = pullall(
     Object.keys(params),
