@@ -10,7 +10,7 @@ let loggerInstance;
 export const PackageLogger = ({
   enableLogging = true,
   logPrefix = 'Package |',
-}) => {
+} = {}) => {
   if (!loggerInstance) {
     loggerInstance = {
       log: function () {
