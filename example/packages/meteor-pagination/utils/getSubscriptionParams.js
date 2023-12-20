@@ -30,6 +30,7 @@ export const getSubscriptionParams = (subscriptionParams = {}) => {
   checkUnsupportedParams({
     params: subscriptionParams,
     defaultParams,
+    logger,
     onUnsupportedParams: ({ unsupportedParams }) => {
       logger.warn(
         'Meteor-pagination: you are passing params, which are not supported by the package, probably need to move them to "cursorSelector"'
