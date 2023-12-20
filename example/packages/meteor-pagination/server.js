@@ -94,6 +94,17 @@ export function publishPaginated(_paginationParams = {}) {
     );
   }
 
+  if (
+    _paginationParams.hasOwnProperty('reactiveCountLimit') &&
+    !isNaN(_paginationParams.reactiveCountLimit) &&
+    _paginationParams.reactiveCountLimit < 0
+  ) {
+    throw new Meteor.Error(
+      '500',
+      `kolyasya:meteor-pagination: "reactiveCountLimit" param must be > 0`
+    );
+  }
+
   checkUnsupportedParams({
     params: _paginationParams,
     defaultParams: defaultPaginationParams,
@@ -106,15 +117,12 @@ export function publishPaginated(_paginationParams = {}) {
     },
   });
 
+  // Merge default params with user provided ones
   const paginationParams = defaults(_paginationParams, defaultPaginationParams);
-
-  if (paginationParams.reactiveCountLimit < 0) {
-    throw new Meteor.Error(`reactiveCountLimit option must be > 0`);
-  }
 
   return Meteor.publish(paginationParams.name, function (_subscriptionParams) {
     // Save into subscription variable
-    // to make it easier to understand code below
+    // It makes it easier to understand the code below
     const subscription = this;
 
     const subscriptionParams = getSubscriptionParams(_subscriptionParams);

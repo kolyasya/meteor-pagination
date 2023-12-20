@@ -1,8 +1,8 @@
 import { handleKeepPreloaded } from './handleKeepPreloaded';
-import { getPublishPaginatedLogger } from './getPublishPaginatedLogger';
+import { PackageLogger } from '../package-utils';
 
 export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
-  const logger = getPublishPaginatedLogger();
+  const logger = PackageLogger();
   let cursorOptions = {};
 
   if (subscriptionParams.limit >= 0) {
@@ -37,7 +37,7 @@ export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
   }
 
   if (typeof paginationParams.transformCursorOptions === 'function') {
-    logger(
+    logger.log(
       'Transforming cursor options with custom functio (transformCursorOptions)...'
     );
 
