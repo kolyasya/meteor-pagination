@@ -10,6 +10,8 @@
   "dependencies": {
     "@babel/runtime": "^7.23.2",
     "jabber": "^1.5.3",
+    "lodash.defaults": "^4.2.0",
+    "lodash.pullall": "^4.2.0",
     "meteor-node-stubs": "^1.2.7",
     "react": "^16.13.1",
     "react-data-table-component": "^6.11.6",

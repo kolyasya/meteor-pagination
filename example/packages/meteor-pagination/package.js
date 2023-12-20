@@ -6,16 +6,15 @@ Package.describe({
   documentation: '../../../README.md',
 });
 
-Npm.depends({
-  'lodash.defaults': '4.2.0',
-  'lodash.pullall': '4.2.0',
-});
-
 Package.onUse(function (api) {
-  api.versionsFrom('2.3.5');
-  api.use('ecmascript');
-  api.use('mongo');
-  api.use('btafel:publish-counts@0.9.3');
+  // api.versionsFrom('2.3.5');
+
+  api.use([
+    'ecmascript',
+    'mongo',
+    'btafel:publish-counts@0.9.3',
+    'tmeasday:check-npm-versions@1.0.2',
+  ]);
 
   api.mainModule('server.js', 'server');
 });

@@ -1,5 +1,7 @@
 /// <reference path="./types.d.ts" />
 
+import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
+
 import { publishCount } from 'meteor/btafel:publish-counts';
 import defaults from 'lodash.defaults';
 
@@ -9,6 +11,16 @@ import { getSubscriptionParams } from './utils/getSubscriptionParams';
 import { getCursorOptions } from './utils/getCursorOptions';
 
 import { PackageLogger, checkUnsupportedParams } from './package-utils';
+
+checkNpmVersions(
+  {
+    'lodash.defaults': '4.2.x',
+    'lodash.pullall': '4.2.x',
+  },
+  'kolyasya:meteor-pagination'
+);
+
+console.log('TODO: Update readme to install deps');
 
 const defaultPaginationParams = {
   enableLogging: false,
