@@ -190,6 +190,7 @@ export function publishPaginated(_paginationParams = {}) {
     logger.log(`Page ${page}, results number: ${cursor.count()}`);
 
     logger.log('Starting observeChanges...');
+    
     const handle = cursor.observeChanges(
       observer({
         subscription,

@@ -13,7 +13,7 @@ export const observer = function ({
 
   return {
     added: (_id, fields) => {
-      logger.log(`Observer added: ${_id}`);
+      logger.log(`Observer → added: ${_id}`);
       const finalFields =
         typeof addedObserverTransformer === 'function'
           ? addedObserverTransformer({
@@ -35,7 +35,7 @@ export const observer = function ({
       subscription.added(customCollectionName, _id, finalFields);
     },
     changed: (_id, fields) => {
-      logger.log(`Observer changed: ${_id}`);
+      logger.log(`Observer → changed: ${_id}`);
       const finalFields =
         typeof changedObserverTransformer === 'function'
           ? changedObserverTransformer({
@@ -49,7 +49,7 @@ export const observer = function ({
       subscription.changed(customCollectionName, _id, finalFields);
     },
     removed: (_id) => {
-      logger.log(`Observer removed: ${_id}`);
+      logger.log(`Observer → removed: ${_id}`);
       if (typeof removedObserverTransformer === 'function') {
         removedObserverTransformer({ _id, subscription, eventType: 'removed' });
       }
