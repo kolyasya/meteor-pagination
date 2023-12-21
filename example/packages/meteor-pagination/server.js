@@ -2,7 +2,7 @@
 
 import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
 
-import { publishCount } from 'meteor/btafel:publish-counts';
+import { publishCount } from 'meteor/kolyasya:publish-counts';
 import defaults from 'lodash.defaults';
 
 import { observer } from './utils/observer';

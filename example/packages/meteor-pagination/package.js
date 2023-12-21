@@ -12,7 +12,7 @@ Package.onUse(function (api) {
   api.use([
     'ecmascript',
     'mongo',
-    'btafel:publish-counts@0.9.3',
+    'kolyasya:publish-counts@1.0.0-beta.1',
     'tmeasday:check-npm-versions@1.0.2',
   ]);
 
