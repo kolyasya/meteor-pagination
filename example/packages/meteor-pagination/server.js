@@ -1,8 +1,7 @@
-/// <reference path="./types.d.ts" />
-
+import { Meteor } from 'meteor/meteor';
 import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
-
 import { publishCount } from 'meteor/kolyasya:publish-counts';
+
 import defaults from 'lodash.defaults';
 
 import { observer } from './utils/observer';
@@ -15,13 +14,14 @@ import { PackageLogger, checkUnsupportedParams } from './package-utils';
 checkNpmVersions(
   {
     'lodash.defaults': '4.2.x',
-    'lodash.pullall': '4.2.x',
+    'lodash.pullall': '4.2.x'
   },
   'kolyasya:meteor-pagination'
 );
 
 console.log('TODO: Update Readme.md to install deps');
 
+/** @type {import('./types').PublishPaginatedParams} */
 const defaultPaginationParams = {
   enableLogging: false,
 
@@ -43,46 +43,19 @@ const defaultPaginationParams = {
   publishCountsOptions: {
     // 10 seconds by default
     pullingInterval: 10 * 1000,
-    noReady: true,
+    noReady: true
   },
 
-  keepPreloaded: false,
+  keepPreloaded: false
 };
 
-/**
- * @param {Object} paginationParams
- *
- * @param {boolean} paginationParams.enableLogging Logs for publication functions
- * @param {string} paginationParams.name Meteor publication name
- * @param {Object} paginationParams.collection Meteor Mongo collection instance
- * @param {string} paginationParams.customCollectionName Name of client-side collection to publish results to ex. "documents.paginated"
- *
- * @param {string} [paginationParams.countsCollectionName]
- *
- *
- * @param {function} [paginationParams.transformCursorSelector] Function to change mongo cursor selector on the fly
- * @param {function} [paginationParams.transformCursorOptions] Function to change mongo cursor options on the fly
- *
- * For better understanding of this part check Meteor observeChanges documentation
- * @param {function} [paginationParams.addedObserverTransformer] Function to transform document on "added" event
- * @param {function} [paginationParams.changedObserverTransformer] Function to transform document on "changed" event
- * @param {function} [paginationParams.removedObserverTransformer] Function to transform document on "removed" event
- *
- * @param {number} [paginationParams.reactiveCountLimit] A number of documents when reactive count will be changed to periodical request. Use it to fix perfomance
- * @param {Object} [paginationParams.publishCountsOptions] options to pass to btafel:publish-counts
- * @param {Object} [paginationParams.publishCountsOptions.pullingInterval]
- *
- * This is not implemented at the moment
- * @param {boolean} [paginationParams.keepPreloaded = false]
- *
- * @return {function}
- */
-export function publishPaginated(_paginationParams = {}) {
+/** @type {import('./types').publishPaginated} */
+export function publishPaginated (_paginationParams) {
   const logger = PackageLogger({
     enableLogging:
       _paginationParams?.enableLogging ||
       defaultPaginationParams?.enableLogging,
-    logPrefix: `Publish Paginated | ${_paginationParams.name} |`,
+    logPrefix: `Publish Paginated | ${_paginationParams.name} |`
   });
 
   if (!_paginationParams?.name) {
@@ -113,7 +86,7 @@ export function publishPaginated(_paginationParams = {}) {
   ) {
     throw new Meteor.Error(
       '500',
-      `kolyasya:meteor-pagination: "reactiveCountLimit" param must be > 0`
+      'kolyasya:meteor-pagination: "reactiveCountLimit" param must be > 0'
     );
   }
 
@@ -126,7 +99,7 @@ export function publishPaginated(_paginationParams = {}) {
         'Meteor-pagination: you are passing params, which are not supported by the package settings'
       );
       logger.warn('Unsupported params:', unsupportedParams);
-    },
+    }
   });
 
   // Merge default params with user provided ones
@@ -141,15 +114,15 @@ export function publishPaginated(_paginationParams = {}) {
 
     const cursorOptions = getCursorOptions({
       paginationParams,
-      subscriptionParams,
+      subscriptionParams
     });
 
     const selector =
       typeof paginationParams?.transformCursorSelector === 'function'
         ? paginationParams.transformCursorSelector({
-            subscriptionParams,
-            paginationParams,
-          })
+          subscriptionParams,
+          paginationParams
+        })
         : subscriptionParams.cursorSelector;
 
     logger.log(
@@ -166,7 +139,7 @@ export function publishPaginated(_paginationParams = {}) {
 
     const countCursor = paginationParams.collection.find(selector, {
       limit: undefined,
-      fields: { _id: 1 },
+      fields: { _id: 1 }
     });
 
     const currentCount = countCursor.count();
@@ -190,7 +163,7 @@ export function publishPaginated(_paginationParams = {}) {
     logger.log(`Page ${page}, results number: ${cursor.count()}`);
 
     logger.log('Starting observeChanges...');
-    
+
     const handle = cursor.observeChanges(
       observer({
         subscription,
@@ -198,7 +171,7 @@ export function publishPaginated(_paginationParams = {}) {
         customCollectionName: paginationParams.customCollectionName,
         addedObserverTransformer: paginationParams.addedObserverTransformer,
         changedObserverTransformer: paginationParams.changedObserverTransformer,
-        removedObserverTransformer: paginationParams.removedObserverTransformer,
+        removedObserverTransformer: paginationParams.removedObserverTransformer
       })
     );
 

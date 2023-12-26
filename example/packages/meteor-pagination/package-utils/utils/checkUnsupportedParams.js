@@ -5,7 +5,7 @@ import { isObject } from './isObject';
 /**
  * Checks if some params passed to a package is not supported
  * Works by comparison with set of default params
- * @type {CheckUnsupportedParams}
+ * @type {import('../types').CheckUnsupportedParams}
  * */
 export const checkUnsupportedParams = ({
   params,
