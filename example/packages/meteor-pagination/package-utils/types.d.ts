@@ -1,10 +1,10 @@
-type PackageLoggerInstance = {
+export type PackageLoggerInstance = {
   log: (this: void, ...data: any[]) => void | undefined;
   error: (this: void, ...data: any[]) => void | undefined;
   warn: (this: void, ...data: any[]) => void | undefined;
 };
 
-type PackageLogger = ({
+export type PackageLogger = ({
   enableLogging,
   logPrefix,
 }: {
@@ -12,7 +12,7 @@ type PackageLogger = ({
   logPrefix?: string;
 }) => PackageLoggerInstance;
 
-type CheckUnsupportedParams = ({
+export type CheckUnsupportedParams = ({
   params,
   defaultParams,
   onUnsupportedParams,
