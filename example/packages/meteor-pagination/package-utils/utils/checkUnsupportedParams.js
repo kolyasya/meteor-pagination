@@ -11,7 +11,7 @@ export const checkUnsupportedParams = ({
   params,
   defaultParams,
   onUnsupportedParams,
-  logger,
+  logger
 }) => {
   if (!logger) {
     logger = console;
@@ -19,8 +19,17 @@ export const checkUnsupportedParams = ({
 
   logger.log('Checking unsupported params...');
 
-  if (!params || !defaultParams || !isObject(params) || !isObject(defaultParams)) {
-    return logger.error(`Can't check unsupported params. You need params and defaultParams to be objects.`);
+  if (
+    !params ||
+    !defaultParams ||
+    !isObject(params) ||
+    !isObject(defaultParams)
+  ) {
+    logger.error(
+      "Can't check unsupported params. You need params and defaultParams to be objects."
+    );
+
+    return;
   }
 
   const unsupportedParams = pullall(

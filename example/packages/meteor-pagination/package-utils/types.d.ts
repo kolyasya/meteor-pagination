@@ -20,6 +20,8 @@ export type CheckUnsupportedParams = ({
 }: {
   params: object;
   defaultParams: object;
-  onUnsupportedParams?: () => {};
+  onUnsupportedParams?: ({ unsupportedParams }: {
+    unsupportedParams: object
+  }) => {};
   logger: PackageLoggerInstance;
 }) => {};
