@@ -71,7 +71,7 @@ export function publishPaginated (_paginationParams) {
     logger,
     onUnsupportedParams: ({ unsupportedParams }) => {
       logger.warn(
-        'Meteor-pagination: you are passing params, which are not supported by the package settings'
+        'You are passing params, which are not supported by the package settings'
       );
       logger.warn('Unsupported params:', unsupportedParams);
     }

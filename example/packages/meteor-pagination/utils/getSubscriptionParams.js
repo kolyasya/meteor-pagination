@@ -24,7 +24,7 @@ export const getSubscriptionParams = (subscriptionParams = {}) => {
     pollingThrottleMs: 10000,
     maxTimeMs: undefined,
     hint: undefined,
-    readPreference: undefined,
+    readPreference: undefined
   };
 
   checkUnsupportedParams({
@@ -33,18 +33,19 @@ export const getSubscriptionParams = (subscriptionParams = {}) => {
     logger,
     onUnsupportedParams: ({ unsupportedParams }) => {
       logger.warn(
-        'Meteor-pagination: you are passing params, which are not supported by the package, probably need to move them to "cursorSelector"'
+        'You are passing subscription params, which are not supported by the package. Check Meteor.Collection.find arguments in Meteor Docs'
       );
       logger.warn('Unsupported params:', unsupportedParams);
-    },
+    }
   });
 
   // Merge default params with passed ones
   const finalParams = defaults(subscriptionParams, defaultParams);
 
-  // console.dir(finalParams, { depth: null });
-
-  logger.log('Got subscription params:\n', JSON.stringify(finalParams, null, 2));
+  logger.log(
+    'Got subscription params:\n',
+    JSON.stringify(finalParams, undefined, 2)
+  );
 
   return finalParams;
 };
