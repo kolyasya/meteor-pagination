@@ -7,7 +7,7 @@ export type PackageLoggerInstance = {
 export type PackageLogger = ({
   enableLogging,
   logPrefix,
-}: {
+}?: {
   enableLogging?: boolean;
   logPrefix?: string;
 }) => PackageLoggerInstance;
