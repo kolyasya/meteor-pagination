@@ -91,7 +91,7 @@ export default withTracker(({ perPage, page, sort }) => {
 
     cursorSelector: {},
 
-    shouldLeadToParamsWarning: true
+    unsupportedParamWhichLeadsToWarning: true
   });
 
   return {
