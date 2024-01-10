@@ -3,7 +3,7 @@ Package.describe({
   version: '0.0.10',
   summary: 'Pagination for Meteor. Based on observeChanges and publishCounts',
   git: 'https://github.com/kolyasya/meteor-pagination',
-  documentation: '../../../README.md',
+  documentation: '../../../README.md'
 });
 
 Package.onUse(function (api) {
@@ -13,7 +13,7 @@ Package.onUse(function (api) {
     'ecmascript',
     'mongo',
     'kolyasya:publish-counts@1.0.0-beta.1',
-    'tmeasday:check-npm-versions@1.0.2',
+    'tmeasday:check-npm-versions@1.0.2'
   ]);
 
   api.mainModule('server.js', 'server');

@@ -8,9 +8,11 @@ import { observer } from './utils/observer';
 
 import { getSubscriptionParams } from './utils/getSubscriptionParams';
 import { getCursorOptions } from './utils/getCursorOptions';
+import { defaultPaginationParams } from './utils/defaultParams';
 
 import { PackageLogger, checkUnsupportedParams } from './package-utils';
 
+// We don't use Npm.depends to prevent possible second copy of a popular npm package
 checkNpmVersions(
   {
     'lodash.defaults': '4.2.x',
@@ -18,36 +20,6 @@ checkNpmVersions(
   },
   'kolyasya:meteor-pagination'
 );
-
-console.log('TODO: Update Readme.md to install deps');
-
-/** @type {import('./types').PublishPaginatedParams} */
-const defaultPaginationParams = {
-  enableLogging: false,
-
-  name: undefined,
-  collection: undefined,
-  customCollectionName: undefined,
-  countsCollectionName: undefined,
-
-  transformCursorSelector: undefined,
-  transformCursorOptions: undefined,
-
-  addedObserverTransformer: undefined,
-  changedObserverTransformer: undefined,
-  removedObserverTransformer: undefined,
-
-  // Defines how many documents will be counted reactively
-  // Because Counts package may be slow on huge amounts of data
-  reactiveCountLimit: 1000,
-  publishCountsOptions: {
-    // 10 seconds by default
-    pullingInterval: 10 * 1000,
-    noReady: true
-  },
-
-  keepPreloaded: false
-};
 
 /** @type {import('./types').publishPaginated} */
 export function publishPaginated (_paginationParams) {
@@ -80,7 +52,10 @@ export function publishPaginated (_paginationParams) {
   }
 
   if (
-    _paginationParams.hasOwnProperty('reactiveCountLimit') &&
+    Object.prototype.hasOwnProperty.call(
+      _paginationParams,
+      'reactiveCountLimit'
+    ) &&
     !isNaN(_paginationParams.reactiveCountLimit) &&
     _paginationParams.reactiveCountLimit < 0
   ) {

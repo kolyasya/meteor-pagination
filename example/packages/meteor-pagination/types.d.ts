@@ -30,7 +30,7 @@ export type PublishPaginatedParams = {
   /** Options to pass to kolyasya:publish-counts */
   publishCountsOptions?: {
     pullingInterval?: number;
-    noReady?: boolean
+    noReady?: boolean;
   };
 
   /** This is not implemented at the moment */
