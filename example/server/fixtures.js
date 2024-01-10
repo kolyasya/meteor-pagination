@@ -13,7 +13,7 @@ Meteor.startup(() => {
   if (Posts.find().count() === 0) {
     console.log('Inserting fixtures to Posts collection...');
 
-    for (let i = 0; i < 91; i++) {
+    for (let i = 1; i < 92; i++) {
       insertPost({
         title: `Post #${i}`,
         content: `${generate(3).join(' ')}`

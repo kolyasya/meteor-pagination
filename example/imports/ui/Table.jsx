@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
+import { Mongo } from 'meteor/mongo';
+import React, { useState, useEffect } from 'react';
+import DataTable from 'react-data-table-component';
 
-import { withTracker } from "meteor/react-meteor-data";
+import { withTracker } from 'meteor/react-meteor-data';
 
-const PostsPaginated = new Mongo.Collection("posts.paginated");
+const PostsPaginated = new Mongo.Collection('posts.paginated');
 
 const columns = [
   {
-    name: "ID",
-    selector: "_id",
+    name: 'Title',
+    selector: 'title',
     sortable: true,
-    width: 100,
-    grow: 0,
+    width: '100px',
+    grow: 0
   },
   {
-    name: "Title",
-    selector: "title",
-    sortable: true,
-    width: 200,
-    grow: 0,
-  },
-  {
-    name: "Content",
-    selector: "content",
+    name: 'Content',
     sortable: false,
+    width: '200px',
     selector: (row, index) =>
       row?.content?.length > 30
-        ? row.content.slice(0, 30) + "..."
-        : row.content,
+        ? row.content.slice(0, 30) + '...'
+        : row.content
   },
+  {
+    name: 'ID',
+    selector: '_id',
+    sortable: true,
+    width: '170px',
+    grow: 0
+  }
 ];
 
 const Table = ({
@@ -37,7 +38,7 @@ const Table = ({
   onChangePage,
   onChangeRowsPerPage,
   totalRows,
-  onSort,
+  onSort
 }) => {
   const fetchUsers = async (page) => {
     setLoading(true);
@@ -77,25 +78,25 @@ const Table = ({
 };
 
 export default withTracker(({ perPage, page, sort }) => {
-  const totalRows = Counts.get("posts.paginated.count");
+  const totalRows = Counts.get('posts.paginated.count');
 
-  const paginatedPostsSub = Meteor.subscribe("posts.paginated", {
+  const paginatedPostsSub = Meteor.subscribe('posts.paginated', {
     skip: page * perPage,
     limit: perPage,
     fields: {
       title: 1,
-      content: 1,
+      content: 1
     },
     sort,
 
     cursorSelector: {},
 
-    shouldLeadToParamsWarning: true,
+    shouldLeadToParamsWarning: true
   });
 
   return {
     postsLoading: !paginatedPostsSub.ready(),
     posts: PostsPaginated.find().fetch(),
-    totalRows,
+    totalRows
   };
 })(Table);

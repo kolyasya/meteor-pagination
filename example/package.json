@@ -14,7 +14,7 @@
     "meteor-node-stubs": "^1.2.7",
     "random-words": "^2.0.0",
     "react": "^16.13.1",
-    "react-data-table-component": "^6.11.6",
+    "react-data-table-component": "^7.5.4",
     "react-dom": "^16.13.1",
     "semistandard": "^17.0.0",
     "styled-components": "^5.2.1"
