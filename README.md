@@ -1,6 +1,14 @@
 # meteor-pagination
 
-Package implements reactive pagination for Meteor apps. It is based on observeChanges callbacks which publish docs into client-side collection like `posts.paginated`.
+Package implements reactive pagination for Meteor apps. It is based on ` observeChanges` callbacks which publish docs into client-side collection e.g.:  `posts.paginated`.
+
+## Install
+
+```sh
+meteor add kolyasya:meteor-pagination
+
+meteor npm install --save lodash.defaults lodash.pullall
+```
 
 ## Usage example
 
@@ -8,11 +16,12 @@ Check [`./example`](https://github.com/kolyasya/meteor-pagination/tree/main/exam
 
 ### Server
 
-Full list of possible params is here — [`https://github.com/kolyasya/meteor-pagination/blob/main/example/packages/meteor-pagination/server.js#L39`]()
+Full list of possible params is here — [`https://github.com/kolyasya/meteor-pagination/blob/main/example/packages/meteor-pagination/utils/defaultParams.js`]()
+
+#### Basic usage:
 
 ```js
 publishPaginated({
-  enableLogging: false,
   collection: Posts, // Mongo collection
   name: 'posts.paginated', // Publication name
   customCollectionName: 'posts.paginated', // Client-side collection name
