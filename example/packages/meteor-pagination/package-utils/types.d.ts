@@ -22,6 +22,6 @@ export type CheckUnsupportedParams = ({
   defaultParams: object;
   onUnsupportedParams?: ({ unsupportedParams }: {
     unsupportedParams: object
-  }) => {};
+  }) => void;
   logger: PackageLoggerInstance;
 }) => {};
