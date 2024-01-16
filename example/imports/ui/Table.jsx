@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
@@ -8,8 +9,26 @@ const PostsPaginated = new Mongo.Collection('posts.paginated');
 
 const columns = [
   {
+    name: 'Created At',
+    id: 'createdAt',
+    sortable: true,
+    width: '170px',
+    grow: 0,
+    selector: (row, index) => {
+      return new Date(row.createdAt).toLocaleString('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+  },
+  {
+    id: 'title',
     name: 'Title',
-    selector: 'title',
+    selector: row => row.title,
     sortable: true,
     width: '100px',
     grow: 0
@@ -17,15 +36,16 @@ const columns = [
   {
     name: 'Content',
     sortable: false,
-    width: '200px',
+    width: '190px',
     selector: (row, index) =>
       row?.content?.length > 30
         ? row.content.slice(0, 30) + '...'
         : row.content
   },
   {
+    id: '_id',
     name: 'ID',
-    selector: '_id',
+    selector: row => row._id,
     sortable: true,
     width: '170px',
     grow: 0
@@ -60,6 +80,14 @@ const Table = ({
     setLoading(false);
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      Meteor.call('insertPost');
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <DataTable
       title="Posts"
@@ -73,6 +101,7 @@ const Table = ({
       onChangeRowsPerPage={onChangeRowsPerPage}
       onChangePage={onChangePage}
       onSort={onSort}
+      defaultSortFieldId="createdAt"
     />
   );
 };
@@ -85,7 +114,8 @@ export default withTracker(({ perPage, page, sort }) => {
     limit: perPage,
     fields: {
       title: 1,
-      content: 1
+      content: 1,
+      createdAt: 1
     },
     sort,
 

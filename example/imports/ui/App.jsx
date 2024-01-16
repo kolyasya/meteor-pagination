@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { withTracker } from "meteor/react-meteor-data";
+import React, { useState } from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 
-import Table from "./Table";
+import Table from './Table';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -9,9 +9,9 @@ const App = () => {
   const [totalRows, setTotalRows] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(0);
-  const [sort, setSort] = useState(undefined);
+  const [sort, setSort] = useState({ createdAt: -1 });
 
-  const handlePageChange = page => {
+  const handlePageChange = (page) => {
     setPage(page - 1);
   };
 
@@ -21,7 +21,8 @@ const App = () => {
   };
 
   const handleSort = (column, sortDirection) => {
-    setSort({ [column.selector]: sortDirection === 'asc' ? 1 : -1 });
+    console.log(column, sortDirection);
+    setSort({ [column.id]: sortDirection === 'asc' ? 1 : -1 });
   };
 
   return (

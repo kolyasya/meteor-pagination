@@ -7,10 +7,19 @@ const insertPost = async ({ title, content }) => {
   await Posts.insertAsync({ title, content, createdAt: new Date() });
 };
 
+Meteor.methods({
+  insertPost: async function ({
+    title = 'New Post',
+    content = `${generate(3).join(' ')}`
+  } = {}) {
+    await Posts.insertAsync({ title, content, createdAt: new Date() });
+  }
+});
+
 Meteor.startup(async () => {
   // await Posts.removeAsync({});
 
-  if (await Posts.find().countAsync() === 0) {
+  if ((await Posts.find().countAsync()) === 0) {
     console.log('Inserting fixtures to Posts collection...');
 
     for (let i = 1; i < 92; i++) {
