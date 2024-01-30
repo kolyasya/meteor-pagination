@@ -107,7 +107,7 @@ export function publishPaginated(_paginationParams = {}) {
     throw new Meteor.Error(`reactiveCountLimit option must be > 0`);
   }
 
-  return Meteor.publish(paginationParams.name, function (_subscriptionParams) {
+  return Meteor.publish(paginationParams.name, async function (_subscriptionParams) {
     // Save into subscription variable
     // to make it easier to understand code below
     const subscription = this;
@@ -144,7 +144,7 @@ export function publishPaginated(_paginationParams = {}) {
       fields: { _id: 1 },
     });
 
-    const currentCount = countCursor.count();
+    const currentCount = await countCursor.countAsync();
 
     if (currentCount < paginationParams.reactiveCountLimit) {
       delete paginationParams.publishCountsOptions.pullingInterval;
