@@ -6,9 +6,10 @@ import defaults from 'lodash.defaults';
 
 import { observer } from './utils/observer';
 
+import { defaultPaginationParams } from './utils/defaultParams';
 import { getSubscriptionParams } from './utils/getSubscriptionParams';
 import { getCursorOptions } from './utils/getCursorOptions';
-import { defaultPaginationParams } from './utils/defaultParams';
+import { validatePaginationParams } from './utils/validatePaginationParams';
 
 import { PackageLogger, checkUnsupportedParams } from './package-utils';
 
@@ -30,26 +31,7 @@ export function publishPaginated (_paginationParams) {
     logPrefix: `Publish Paginated | ${_paginationParams.name} |`
   });
 
-  if (!_paginationParams?.name) {
-    throw new Meteor.Error(
-      '500',
-      'kolyasya:meteor-pagination: "name" param is required for publishPaginated function'
-    );
-  }
-
-  if (!_paginationParams?.collection) {
-    throw new Meteor.Error(
-      '500',
-      'kolyasya:meteor-pagination: "collection" param is required for publishPaginated function'
-    );
-  }
-
-  if (!_paginationParams?.customCollectionName) {
-    throw new Meteor.Error(
-      '500',
-      'kolyasya:meteor-pagination: "customCollectionName" param is required for publishPaginated function'
-    );
-  }
+  validatePaginationParams({ params: _paginationParams });
 
   if (
     Object.prototype.hasOwnProperty.call(

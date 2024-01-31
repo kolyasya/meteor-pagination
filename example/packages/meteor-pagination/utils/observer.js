@@ -1,4 +1,4 @@
-import { PackageLogger } from "../package-utils";
+import { PackageLogger } from '../package-utils';
 
 // observe callback function
 export const observer = function ({
@@ -7,7 +7,7 @@ export const observer = function ({
   page,
   addedObserverTransformer,
   changedObserverTransformer,
-  removedObserverTransformer,
+  removedObserverTransformer
 }) {
   const logger = PackageLogger();
 
@@ -17,18 +17,18 @@ export const observer = function ({
       const finalFields =
         typeof addedObserverTransformer === 'function'
           ? addedObserverTransformer({
-              fields,
-              _id,
-              subscription,
-              eventType: 'added',
-            })
+            fields,
+            _id,
+            subscription,
+            eventType: 'added'
+          })
           : fields;
 
       // For published documents we insert an object with pagination data
       // At the moment it is only a page number
       if (!finalFields?.hasOwnProperty('meteorPagination')) {
         finalFields.meteorPagination = {
-          page,
+          page
         };
       }
 
@@ -39,11 +39,11 @@ export const observer = function ({
       const finalFields =
         typeof changedObserverTransformer === 'function'
           ? changedObserverTransformer({
-              fields,
-              _id,
-              subscription,
-              eventType: 'changed',
-            })
+            fields,
+            _id,
+            subscription,
+            eventType: 'changed'
+          })
           : fields;
 
       subscription.changed(customCollectionName, _id, finalFields);
@@ -54,6 +54,6 @@ export const observer = function ({
         removedObserverTransformer({ _id, subscription, eventType: 'removed' });
       }
       subscription.removed(customCollectionName, _id);
-    },
+    }
   };
 };

@@ -8,11 +8,19 @@ export const defaultPaginationParams = {
   countsCollectionName: undefined,
 
   transformCursorSelector: undefined,
+  transformCursorSelectorAsync: undefined,
+
   transformCursorOptions: undefined,
+  transformCursorOptionsAsync: undefined,
 
   addedObserverTransformer: undefined,
+  addedObserverTransformerAsync: undefined,
+
   changedObserverTransformer: undefined,
+  changedObserverTransformerAsync: undefined,
+
   removedObserverTransformer: undefined,
+  removedObserverTransformerAsync: undefined,
 
   // Defines how many documents will be counted reactively
   // Because Counts package may be slow on huge amounts of data
