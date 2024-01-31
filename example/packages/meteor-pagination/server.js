@@ -53,9 +53,10 @@ export function publishPaginated (_paginationParams) {
     logger,
     onUnsupportedParams: ({ unsupportedParams }) => {
       logger.warn(
-        'You are passing params, which are not supported by the package settings'
+        'You are passing params, which are not supported by the package settings\n',
+        'Unsupported params:',
+        unsupportedParams
       );
-      logger.warn('Unsupported params:', unsupportedParams);
     }
   });
 
@@ -127,8 +128,11 @@ export function publishPaginated (_paginationParams) {
         page,
         customCollectionName: paginationParams.customCollectionName,
         addedObserverTransformer: paginationParams.addedObserverTransformer,
+        addedObserverTransformerAsync: paginationParams.addedObserverTransformerAsync,
         changedObserverTransformer: paginationParams.changedObserverTransformer,
-        removedObserverTransformer: paginationParams.removedObserverTransformer
+        changedObserverTransformerAsync: paginationParams.changedObserverTransformerAsync,
+        removedObserverTransformer: paginationParams.removedObserverTransformer,
+        removedObserverTransformerAsync: paginationParams.removedObserverTransformerAsync
       })
     );
 
