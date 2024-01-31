@@ -12,11 +12,11 @@ const observer = function ({
   const logger = getPublishPaginatedLogger();
 
   return {
-    added: (_id, fields) => {
+    added: async (_id, fields) => {
       logger(`Observer added: ${_id}`);
       const finalFields =
         typeof addedObserverTransformer === 'function'
-          ? addedObserverTransformer({
+          ? await addedObserverTransformer({
               fields,
               _id,
               subscription,
@@ -34,11 +34,11 @@ const observer = function ({
 
       subscription.added(customCollectionName, _id, finalFields);
     },
-    changed: (_id, fields) => {
+    changed: async (_id, fields) => {
       logger(`Observer changed: ${_id}`);
       const finalFields =
         typeof changedObserverTransformer === 'function'
-          ? changedObserverTransformer({
+          ? await changedObserverTransformer({
               fields,
               _id,
               subscription,
@@ -48,10 +48,10 @@ const observer = function ({
 
       subscription.changed(customCollectionName, _id, finalFields);
     },
-    removed: (_id) => {
+    removed: async (_id) => {
       logger(`Observer removed: ${_id}`);
       if (typeof removedObserverTransformer === 'function') {
-        removedObserverTransformer({ _id, subscription, eventType: 'removed' });
+        await removedObserverTransformer({ _id, subscription, eventType: 'removed' });
       }
       subscription.removed(customCollectionName, _id);
     },
