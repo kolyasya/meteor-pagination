@@ -13,7 +13,7 @@ import { validatePaginationParams } from './utils/validatePaginationParams';
 
 import { PackageLogger, checkUnsupportedParams } from './package-utils';
 
-// We don't use Npm.depends to prevent possible second copy of a popular npm package
+// We don't use Npm.depends to prevent possible second copy of a popular npm packages
 checkNpmVersions(
   {
     'lodash.defaults': '4.2.x',
@@ -32,20 +32,6 @@ export function publishPaginated (_paginationParams) {
   });
 
   validatePaginationParams({ params: _paginationParams });
-
-  if (
-    Object.prototype.hasOwnProperty.call(
-      _paginationParams,
-      'reactiveCountLimit'
-    ) &&
-    !isNaN(_paginationParams.reactiveCountLimit) &&
-    _paginationParams.reactiveCountLimit < 0
-  ) {
-    throw new Meteor.Error(
-      '500',
-      'kolyasya:meteor-pagination: "reactiveCountLimit" param must be > 0'
-    );
-  }
 
   checkUnsupportedParams({
     params: _paginationParams,

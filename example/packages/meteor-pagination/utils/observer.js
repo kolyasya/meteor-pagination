@@ -6,8 +6,11 @@ export const observer = function ({
   customCollectionName,
   page,
   addedObserverTransformer,
+  addedObserverTransformerAsync,
   changedObserverTransformer,
-  removedObserverTransformer
+  changedObserverTransformerAsync,
+  removedObserverTransformer,
+  removedObserverTransformerAsync
 }) {
   const logger = PackageLogger();
 
@@ -26,7 +29,9 @@ export const observer = function ({
 
       // For published documents we insert an object with pagination data
       // At the moment it is only a page number
-      if (!finalFields?.hasOwnProperty('meteorPagination')) {
+      if (
+        !Object.prototype.hasOwnProperty.call(finalFields, 'meteorPagination')
+      ) {
         finalFields.meteorPagination = {
           page
         };

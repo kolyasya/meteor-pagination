@@ -1,4 +1,4 @@
-import { handleKeepPreloaded } from './handleKeepPreloaded';
+// import { handleKeepPreloaded } from './handleKeepPreloaded';
 import { PackageLogger } from '../package-utils';
 
 export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
@@ -21,12 +21,12 @@ export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
     cursorOptions.fields = subscriptionParams.fields;
   }
 
-  if (subscriptionParams.keepPreloaded) {
-    cursorOptions = handleKeepPreloaded({
-      options,
-      params: subscriptionParams,
-    });
-  }
+  // if (subscriptionParams.keepPreloaded) {
+  //   cursorOptions = handleKeepPreloaded({
+  //     options,
+  //     params: subscriptionParams,
+  //   });
+  // }
 
   if (subscriptionParams.transform) {
     cursorOptions.transform = subscriptionParams.transform;
@@ -44,12 +44,12 @@ export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
     cursorOptions = paginationParams.transformCursorOptions({
       paginationParams,
       subscriptionParams,
-      cursorOptions,
+      cursorOptions
     });
 
     if (typeof cursorOptions !== 'object') {
       console.warn(
-        `"transformCursorOptions" function should return object, which will be used as Mongo Cursor options param`
+        '"transformCursorOptions" function should return object, which will be used as Mongo Cursor options param'
       );
     }
   }

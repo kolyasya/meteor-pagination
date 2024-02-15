@@ -29,7 +29,7 @@ export const defaultPaginationParams = {
     // 10 seconds by default
     pullingInterval: 10 * 1000,
     noReady: true
-  },
+  }
 
-  keepPreloaded: false
+  // keepPreloaded: false
 };

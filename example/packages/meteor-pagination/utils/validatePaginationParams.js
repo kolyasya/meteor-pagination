@@ -23,6 +23,17 @@ export const validatePaginationParams = ({ params }) => {
     );
   }
 
+  if (
+    Object.prototype.hasOwnProperty.call(params, 'reactiveCountLimit') &&
+    !isNaN(params.reactiveCountLimit) &&
+    params.reactiveCountLimit < 0
+  ) {
+    throw new Meteor.Error(
+      '500',
+      'kolyasya:meteor-pagination: "reactiveCountLimit" param must be > 0'
+    );
+  }
+
   const syncFunctions = {
     transformCursorSelector: 1,
     transformCursorOptions: 1,

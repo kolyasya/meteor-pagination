@@ -49,7 +49,7 @@ export type PublishPaginatedParams = {
   };
 
   /** This is not implemented at the moment */
-  keepPreloaded?: boolean;
+  // keepPreloaded?: boolean;
 };
 
 /**
