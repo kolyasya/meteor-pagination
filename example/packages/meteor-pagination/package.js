@@ -10,8 +10,8 @@ Package.onUse(function (api) {
   // api.versionsFrom('2.3.5');
 
   api.use([
-    'ecmascript',
-    'mongo',
+    'ecmascript@0.16.0',
+    'mongo@1.13.0',
     'kolyasya:publish-counts@1.0.0-beta.1',
     'tmeasday:check-npm-versions@1.0.2'
   ]);
