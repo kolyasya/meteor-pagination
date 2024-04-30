@@ -3,6 +3,8 @@ import { Mongo } from 'meteor/mongo';
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 
+import { Counts } from 'meteor/compat:publish-counts';
+
 import { withTracker } from 'meteor/react-meteor-data';
 
 const PostsPaginated = new Mongo.Collection('posts.paginated');

@@ -11,9 +11,9 @@ Package.onUse(function (api) {
 
   api.use([
     'ecmascript@0.16.0',
-    'mongo@1.13.0',
-    'kolyasya:publish-counts@1.0.0-beta.1',
-    'tmeasday:check-npm-versions@1.0.2'
+    'mongo@2.0.0-rc300.0',
+    'compat:publish-counts',
+    'tmeasday:check-npm-versions@2.0.0-beta.0'
   ]);
 
   api.mainModule('server.js', 'server');
