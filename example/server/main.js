@@ -19,7 +19,9 @@ publishPaginated({
   //   return fields;
   // }
   addedObserverTransformerAsync: async ({ fields }) => {
-    await asyncDelay(2000);
+    console.log('Delay #1');
+    await asyncDelay(500);
+    console.log('Delay #2');
 
     fields.content = 'test_' + Random.id();
 

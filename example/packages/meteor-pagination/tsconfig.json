@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "target": "ES2015", // Set the target to ES2015 or higher
+    "lib": ["ES2015", "dom"], // Include ES2015 and dom libraries
     "allowJs": true,
     "checkJs": true
   },

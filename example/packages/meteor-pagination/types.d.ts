@@ -65,3 +65,20 @@ export function validatePaginationParams({
 }: {
   params: PublishPaginatedParams;
 }): void;
+
+export type GetObserversParams = {
+  subscription: object,
+  customCollectionName: string,
+  page: number,
+
+  addedObserverTransformer?: () => void,
+  addedObserverTransformerAsync?: () => void,
+
+  changedObserverTransformer?: () => void,
+  changedObserverTransformerAsync?: () => void,
+
+  removedObserverTransformer?: () => void,
+  removedObserverTransformerAsync?: () => void
+}
+
+export function getObservers(getObserversParams: GetObserversParams): void

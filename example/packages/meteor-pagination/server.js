@@ -4,7 +4,7 @@ import { publishCount } from 'meteor/compat:publish-counts';
 
 import defaults from 'lodash.defaults';
 
-import { observer } from './utils/observer';
+import { getObservers } from './utils/getObservers';
 
 import { defaultPaginationParams } from './utils/defaultParams';
 import { getSubscriptionParams } from './utils/getSubscriptionParams';
@@ -26,6 +26,7 @@ checkNpmVersions(
 export function publishPaginated (_paginationParams) {
   const logger = PackageLogger({
     enableLogging:
+      true ||
       _paginationParams?.enableLogging ||
       defaultPaginationParams?.enableLogging,
     logPrefix: `Publish Paginated | ${_paginationParams.name} |`
@@ -113,24 +114,46 @@ export function publishPaginated (_paginationParams) {
 
       logger.log('Starting observeChanges...');
 
-      const handle = cursor.observeChanges(
-        observer({
-          subscription,
-          page,
-          customCollectionName: paginationParams.customCollectionName,
-          addedObserverTransformer: paginationParams.addedObserverTransformer,
-          addedObserverTransformerAsync:
-            paginationParams.addedObserverTransformerAsync,
-          changedObserverTransformer:
-            paginationParams.changedObserverTransformer,
-          changedObserverTransformerAsync:
-            paginationParams.changedObserverTransformerAsync,
-          removedObserverTransformer:
-            paginationParams.removedObserverTransformer,
-          removedObserverTransformerAsync:
-            paginationParams.removedObserverTransformerAsync
-        })
-      );
+      let handle;
+
+      // Async observers
+      if (
+        typeof paginationParams.addedObserverTransformerAsync === 'function' ||
+        typeof paginationParams.changedObserverTransformerAsync === 'function' ||
+        typeof paginationParams.removedObserverTransformerAsync === 'function'
+      ) {
+        console.log('USING ASYNC OBSERVERS');
+
+        handle = await cursor.observeChangesAsync(
+          getObservers({
+            subscription,
+            page,
+            customCollectionName: paginationParams.customCollectionName,
+
+            addedObserverTransformerAsync:
+              paginationParams.addedObserverTransformerAsync,
+            changedObserverTransformerAsync:
+              paginationParams.changedObserverTransformerAsync,
+            removedObserverTransformerAsync:
+              paginationParams.removedObserverTransformerAsync
+          })
+        );
+      } else {
+        // Sync observers
+        handle = cursor.observeChanges(
+          getObservers({
+            subscription,
+            page,
+            customCollectionName: paginationParams.customCollectionName,
+
+            addedObserverTransformer: paginationParams.addedObserverTransformer,
+            changedObserverTransformer:
+              paginationParams.changedObserverTransformer,
+            removedObserverTransformer:
+              paginationParams.removedObserverTransformer
+          })
+        );
+      }
 
       subscription.onStop(() => handle.stop());
 
