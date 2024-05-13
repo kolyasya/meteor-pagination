@@ -119,10 +119,11 @@ export function publishPaginated (_paginationParams) {
       // Async observers
       if (
         typeof paginationParams.addedObserverTransformerAsync === 'function' ||
-        typeof paginationParams.changedObserverTransformerAsync === 'function' ||
+        typeof paginationParams.changedObserverTransformerAsync ===
+          'function' ||
         typeof paginationParams.removedObserverTransformerAsync === 'function'
       ) {
-        console.log('USING ASYNC OBSERVERS');
+        logger.log('Applying async observers...');
 
         handle = await cursor.observeChangesAsync(
           getObservers({

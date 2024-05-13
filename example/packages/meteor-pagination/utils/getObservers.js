@@ -20,8 +20,8 @@ export const getObservers = function ({
 
   if (
     typeof addedObserverTransformerAsync === 'function' ||
-    typeof changedObserverTransformer === 'function' ||
-    typeof removedObserverTransformer === 'function'
+    typeof changedObserverTransformerAsync === 'function' ||
+    typeof removedObserverTransformerAsync === 'function'
   ) {
     return {
       added: async (_id, fields) => {

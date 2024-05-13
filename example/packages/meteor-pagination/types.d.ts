@@ -66,19 +66,34 @@ export function validatePaginationParams({
   params: PublishPaginatedParams;
 }): void;
 
+export type TransformerParams<T extends 'added' | 'changed' | 'removed'> = {
+  fields?: object;
+  _id: string;
+  subscription: object;
+  eventType: T;
+};
+
 export type GetObserversParams = {
-  subscription: object,
-  customCollectionName: string,
-  page: number,
+  subscription: object;
+  customCollectionName: string;
+  page: number;
 
-  addedObserverTransformer?: () => void,
-  addedObserverTransformerAsync?: () => void,
+  addedObserverTransformer?: (params: TransformerParams<'added'>) => void;
+  addedObserverTransformerAsync?: (params: TransformerParams<'added'>) => void;
 
-  changedObserverTransformer?: () => void,
-  changedObserverTransformerAsync?: () => void,
+  changedObserverTransformer?: (params: TransformerParams<'changed'>) => void;
+  changedObserverTransformerAsync?: (
+    params: TransformerParams<'changed'>
+  ) => void;
 
-  removedObserverTransformer?: () => void,
-  removedObserverTransformerAsync?: () => void
-}
+  removedObserverTransformer?: (params: TransformerParams<'removed'>) => void;
+  removedObserverTransformerAsync?: (
+    params: TransformerParams<'removed'>
+  ) => void;
+};
 
-export function getObservers(getObserversParams: GetObserversParams): void
+export function getObservers(getObserversParams: GetObserversParams): {
+  added?: () => void;
+  changed?: () => void;
+  removed?: () => void;
+};
