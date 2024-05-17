@@ -59,7 +59,7 @@ export function publishPaginated (_paginationParams) {
 
       const subscriptionParams = getSubscriptionParams(_subscriptionParams);
 
-      const cursorOptions = getCursorOptions({
+      const cursorOptions = await getCursorOptions({
         paginationParams,
         subscriptionParams
       });
@@ -70,7 +70,12 @@ export function publishPaginated (_paginationParams) {
             subscriptionParams,
             paginationParams
           })
-          : subscriptionParams.cursorSelector;
+          : typeof paginationParams?.transformCursorSelectorAsync === 'function'
+            ? await paginationParams.transformCursorSelectorAsync({
+              subscriptionParams,
+              paginationParams
+            })
+            : subscriptionParams.cursorSelector;
 
       logger.log(
         `Cursor:\nselector:\n${JSON.stringify(

@@ -1,7 +1,7 @@
 // import { handleKeepPreloaded } from './handleKeepPreloaded';
 import { PackageLogger } from '../package-utils';
 
-export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
+export const getCursorOptions = async ({ paginationParams, subscriptionParams }) => {
   const logger = PackageLogger();
   let cursorOptions = {};
 
@@ -38,7 +38,7 @@ export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
 
   if (typeof paginationParams.transformCursorOptions === 'function') {
     logger.log(
-      'Transforming cursor options with custom functio (transformCursorOptions)...'
+      'Transforming cursor options with custom function (transformCursorOptions)...'
     );
 
     cursorOptions = paginationParams.transformCursorOptions({
@@ -50,6 +50,24 @@ export const getCursorOptions = ({ paginationParams, subscriptionParams }) => {
     if (typeof cursorOptions !== 'object') {
       console.warn(
         '"transformCursorOptions" function should return object, which will be used as Mongo Cursor options param'
+      );
+    }
+  }
+
+  if (typeof paginationParams.transformCursorOptionsAsync === 'function') {
+    logger.log(
+      'Transforming cursor options with custom function (transformCursorOptionsAsync)...'
+    );
+
+    cursorOptions = await paginationParams.transformCursorOptionsAsync({
+      paginationParams,
+      subscriptionParams,
+      cursorOptions
+    });
+
+    if (typeof cursorOptions !== 'object') {
+      console.warn(
+        '"transformCursorOptionsAsync" function should return object, which will be used as Mongo Cursor options param'
       );
     }
   }
