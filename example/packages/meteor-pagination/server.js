@@ -161,7 +161,11 @@ export function publishPaginated (_paginationParams) {
         );
       }
 
-      subscription.onStop(() => handle.stop());
+      subscription.onStop(() => {
+        if (typeof handle?.stop === 'function') {
+          handle.stop();
+        }
+      });
 
       return subscription.ready();
     }
