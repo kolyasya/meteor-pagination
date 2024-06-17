@@ -4,9 +4,11 @@ import './fixtures';
 import { publishPaginated } from 'meteor/kolyasya:meteor-pagination';
 
 import Posts from '../imports/api/posts';
+import Users from '../imports/api/users';
 
 import { asyncDelay } from './asyncDelay';
 
+// Posts Paginated
 publishPaginated({
   enableLogging: true,
   collection: Posts,
@@ -33,4 +35,20 @@ publishPaginated({
   // removedObserverTransformer: (fields) => {
   //   console.log(fields);
   // }
+});
+
+// Users Paginated
+publishPaginated({
+  enableLogging: true,
+  collection: Users,
+  name: 'users.paginated',
+  customCollectionName: 'users.paginated',
+  countsCollectionName: 'users.paginated.count',
+  addedObserverTransformerAsync: async ({ fields }) => {
+    await asyncDelay(100);
+
+    fields.content = 'users_test_' + Random.id();
+
+    return fields;
+  }
 });

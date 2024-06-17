@@ -1,13 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import React, { useState, useEffect } from 'react';
-import DataTable from 'react-data-table-component';
+import React, { useEffect } from 'react';
 
 import { Counts } from 'meteor/compat:publish-counts';
+import DataTable from 'react-data-table-component';
 
 import { withTracker } from 'meteor/react-meteor-data';
 
-const PostsPaginated = new Mongo.Collection('posts.paginated');
+const UsersPaginated = new Mongo.Collection('users.paginated');
 
 const columns = [
   {
@@ -28,9 +28,17 @@ const columns = [
     }
   },
   {
-    id: 'title',
-    name: 'Title',
-    selector: row => row.title,
+    id: 'name',
+    name: 'Name',
+    selector: (row) => row.name,
+    sortable: true,
+    width: '100px',
+    grow: 0
+  },
+  {
+    id: 'age',
+    name: 'Age',
+    selector: (row) => row?.age,
     sortable: true,
     width: '100px',
     grow: 0
@@ -47,7 +55,7 @@ const columns = [
   {
     id: '_id',
     name: 'ID',
-    selector: row => row._id,
+    selector: (row) => row._id,
     sortable: true,
     width: '170px',
     grow: 0
@@ -55,47 +63,19 @@ const columns = [
 ];
 
 const Table = ({
-  posts,
-  postsLoading,
+  users,
+  usersLoading,
   onChangePage,
   onChangeRowsPerPage,
   totalRows,
   onSort
 }) => {
-  const fetchUsers = async (page) => {
-    setLoading(true);
-
-    setData(response.data.data);
-    setTotalRows(response.data.total);
-    setLoading(false);
-  };
-
-  const handlePageChange = (page) => {
-    fetchUsers(page);
-  };
-
-  const handlePerRowsChange = async (newPerPage, page) => {
-    setLoading(true);
-
-    setData(response.data.data);
-    setPerPage(newPerPage);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      Meteor.call('insertPost');
-    }, 3000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
     <DataTable
-      title="Posts"
+      title="Users"
       columns={columns}
-      data={posts}
-      progressPending={postsLoading}
+      data={users}
+      progressPending={usersLoading}
       pagination
       paginationServer
       selectableRows
@@ -109,26 +89,24 @@ const Table = ({
 };
 
 export default withTracker(({ perPage, page, sort }) => {
-  const totalRows = Counts.get('posts.paginated.count');
+  const totalRows = Counts.get('users.paginated.count');
 
-  const paginatedPostsSub = Meteor.subscribe('posts.paginated', {
+  const paginatedUsersSub = Meteor.subscribe('users.paginated', {
     skip: page * perPage,
     limit: perPage,
     fields: {
-      title: 1,
-      content: 1,
+      name: 1,
+      age: 1,
       createdAt: 1
     },
     sort,
-
     cursorSelector: {},
-
     unsupportedParamWhichLeadsToWarning: true
   });
 
   return {
-    postsLoading: !paginatedPostsSub.ready(),
-    posts: PostsPaginated.find().fetch(),
+    usersLoading: !paginatedUsersSub.ready(),
+    users: UsersPaginated.find().fetch(),
     totalRows
   };
 })(Table);

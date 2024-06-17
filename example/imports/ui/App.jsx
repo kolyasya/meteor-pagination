@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { withTracker } from 'meteor/react-meteor-data';
 
-import Table from './Table';
+import PostsTable from './PostsTable';
+import UsersTable from './UsersTable';
 
 const App = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [totalRows, setTotalRows] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState({ createdAt: -1 });
+
+  const [perPageUsers, setPerPageUsers] = useState(10);
+  const [pageUsers, setPageUsers] = useState(0);
+  const [sortUsers, setSortUsers] = useState({ createdAt: 1 });
 
   const handlePageChange = (page) => {
     setPage(page - 1);
@@ -25,17 +26,43 @@ const App = () => {
     setSort({ [column.id]: sortDirection === 'asc' ? 1 : -1 });
   };
 
+  const handlePageUsersChange = (page) => {
+    setPageUsers(page - 1);
+  };
+
+  const handleRowsPerPageUsersChange = (newPerPage, page) => {
+    setPerPageUsers(newPerPage);
+    setPageUsers(page);
+  };
+
+  const handleSortUsers = (column, sortDirection) => {
+    console.log(column, sortDirection);
+    setSortUsers({ [column.id]: sortDirection === 'asc' ? 1 : -1 });
+  };
+
   return (
-    <div>
-      <Table
-        onChangePage={handlePageChange}
-        perPage={perPage}
-        onChangeRowsPerPage={handleRowsPerPageChange}
-        page={page}
-        onSort={handleSort}
-        sort={sort}
-      />
-    </div>
+    <>
+      <div>
+        <PostsTable
+          onChangePage={handlePageChange}
+          perPage={perPage}
+          onChangeRowsPerPage={handleRowsPerPageChange}
+          page={page}
+          onSort={handleSort}
+          sort={sort}
+        />
+      </div>
+      <div>
+        <UsersTable
+          onChangePage={handlePageUsersChange}
+          perPage={perPageUsers}
+          onChangeRowsPerPage={handleRowsPerPageUsersChange}
+          page={pageUsers}
+          onSort={handleSortUsers}
+          sort={sortUsers}
+        />
+      </div>
+    </>
   );
 };
 
