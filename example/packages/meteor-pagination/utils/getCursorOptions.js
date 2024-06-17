@@ -1,8 +1,13 @@
 // import { handleKeepPreloaded } from './handleKeepPreloaded';
 import { PackageLogger } from '../package-utils';
 
-export const getCursorOptions = async ({ paginationParams, subscriptionParams }) => {
-  const logger = PackageLogger();
+export const getCursorOptions = async ({
+  paginationParams,
+  subscriptionParams,
+  logPrefix
+}) => {
+  const logger = new PackageLogger({ logPrefix });
+
   let cursorOptions = {};
 
   if (subscriptionParams.limit >= 0) {

@@ -2,8 +2,8 @@ import defaults from 'lodash.defaults';
 
 import { PackageLogger, checkUnsupportedParams } from '../package-utils';
 
-export const getSubscriptionParams = (subscriptionParams = {}) => {
-  const logger = PackageLogger();
+export const getSubscriptionParams = ({ subscriptionParams = {}, logPrefix }) => {
+  const logger = new PackageLogger({ logPrefix });
 
   logger.log('Getting subscription params...');
 

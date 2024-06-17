@@ -16,7 +16,7 @@ export const getObservers = function ({
   removedObserverTransformer,
   removedObserverTransformerAsync
 }) {
-  const logger = PackageLogger();
+  const logger = new PackageLogger({ logPrefix: subscription?._name });
 
   if (
     typeof addedObserverTransformerAsync === 'function' ||
