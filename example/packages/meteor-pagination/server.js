@@ -26,7 +26,6 @@ checkNpmVersions(
 export function publishPaginated (_paginationParams) {
   const logger = new PackageLogger({
     enableLogging:
-      true ||
       _paginationParams?.enableLogging ||
       defaultPaginationParams?.enableLogging,
     logPrefix: `Publish Paginated | ${_paginationParams.name} |`

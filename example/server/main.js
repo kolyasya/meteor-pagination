@@ -8,6 +8,23 @@ import Users from '../imports/api/users';
 
 import { asyncDelay } from './asyncDelay';
 
+Meteor.startup(async () => {
+  const existingAdmin = await Users.findOneAsync({ username: 'admin' });
+
+  if (!existingAdmin) {
+    console.log('Creating user: admin / admin');
+
+    Accounts.createUser({
+      username: 'admin',
+      password: 'admin',
+      email: 'admmin@admin.com',
+      profile: {
+        firstName: 'Admin'
+      }
+    });
+  }
+});
+
 // Posts Paginated
 publishPaginated({
   enableLogging: true,
@@ -15,11 +32,7 @@ publishPaginated({
   name: 'posts.paginated',
   customCollectionName: 'posts.paginated',
   countsCollectionName: 'posts.paginated.count',
-  // transformCursorSelector: () => {},
-  // addedObserverTransformer: ({ fields }) => {
-  //   fields.content = 'test_' + Random.id();
-  //   return fields;
-  // }
+
   addedObserverTransformerAsync: async ({ fields }) => {
     console.log('Delay #1');
     await asyncDelay(100);
@@ -28,13 +41,20 @@ publishPaginated({
     fields.content = 'test_' + Random.id();
 
     return fields;
+  },
+
+  transformCursorSelectorAsync: async ({ subscriptionParams }) => {
+    const user = await Meteor.user();
+
+    // Will return nothing
+    if (!user?.username === 'admin') {
+      return {
+        _id: { $exists: false }
+      };
+    }
+
+    return subscriptionParams.cursorSelector || {};
   }
-  // changedObserverTransformer: (fields) => {
-  //   console.log(fields);
-  // },
-  // removedObserverTransformer: (fields) => {
-  //   console.log(fields);
-  // }
 });
 
 // Users Paginated
