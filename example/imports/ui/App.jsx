@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 
 import PostsTable from './PostsTable';
 import UsersTable from './UsersTable';
@@ -41,28 +41,30 @@ const App = () => {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ width: '47%', marginRight: '3%' }}>
-        <UsersTable
-          onChangePage={handlePageUsersChange}
-          perPage={perPageUsers}
-          onChangeRowsPerPage={handleRowsPerPageUsersChange}
-          page={pageUsers}
-          onSort={handleSortUsers}
-          sort={sortUsers}
-        />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div style={{ display: 'flex' }}>
+        <div style={{ width: '47%', marginRight: '3%' }}>
+          <UsersTable
+            onChangePage={handlePageUsersChange}
+            perPage={perPageUsers}
+            onChangeRowsPerPage={handleRowsPerPageUsersChange}
+            page={pageUsers}
+            onSort={handleSortUsers}
+            sort={sortUsers}
+          />
+        </div>
+{/*         <div style={{ width: '50%' }}>
+          <PostsTable
+            onChangePage={handlePageChange}
+            perPage={perPage}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            page={page}
+            onSort={handleSort}
+            sort={sort}
+          />
+        </div> */}
       </div>
-      <div style={{ width: '50%' }}>
-        <PostsTable
-          onChangePage={handlePageChange}
-          perPage={perPage}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          page={page}
-          onSort={handleSort}
-          sort={sort}
-        />
-      </div>
-    </div>
+    </Suspense>
   );
 };
 

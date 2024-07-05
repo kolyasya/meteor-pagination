@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import React, { useEffect } from 'react';
 
+import { useTracker, useSubscribe } from 'meteor/react-meteor-data/suspense';
+
 import { Counts } from 'meteor/compat:publish-counts';
 import DataTable from 'react-data-table-component';
 
@@ -62,36 +64,15 @@ const columns = [
   }
 ];
 
-const Table = ({
-  users,
-  usersLoading,
+const UsersTable = ({
   onChangePage,
   onChangeRowsPerPage,
-  totalRows,
-  onSort
+  onSort,
+  page,
+  perPage,
+  sort
 }) => {
-  return (
-    <DataTable
-      title="Users"
-      columns={columns}
-      data={users}
-      progressPending={usersLoading}
-      pagination
-      paginationServer
-      selectableRows
-      paginationTotalRows={totalRows}
-      onChangeRowsPerPage={onChangeRowsPerPage}
-      onChangePage={onChangePage}
-      onSort={onSort}
-      defaultSortFieldId="createdAt"
-    />
-  );
-};
-
-export default withTracker(({ perPage, page, sort }) => {
-  const totalRows = Counts.get('users.paginated.count');
-
-  const paginatedUsersSub = Meteor.subscribe('users.paginated', {
+  useSubscribe('users.paginated', {
     skip: page * perPage,
     limit: perPage,
     fields: {
@@ -104,9 +85,31 @@ export default withTracker(({ perPage, page, sort }) => {
     unsupportedParamWhichLeadsToWarning: true
   });
 
-  return {
-    usersLoading: !paginatedUsersSub.ready(),
-    users: UsersPaginated.find().fetch(),
-    totalRows
-  };
-})(Table);
+  // const totalRows = useTracker('totalRows', () =>
+  //   Counts.get('users.paginated.count')
+  // );
+  const users = useTracker('users', () => UsersPaginated.find().fetchAsync());
+
+  // const users = [];
+
+  const totalRows = 1;
+
+  return (
+    <DataTable
+      title="Users"
+      columns={columns}
+      data={users}
+      progressPending={false}
+      pagination
+      paginationServer
+      selectableRows
+      paginationTotalRows={totalRows}
+      onChangeRowsPerPage={onChangeRowsPerPage}
+      onChangePage={onChangePage}
+      onSort={onSort}
+      defaultSortFieldId="createdAt"
+    />
+  );
+};
+
+export default UsersTable;
