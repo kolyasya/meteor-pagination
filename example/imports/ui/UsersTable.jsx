@@ -88,7 +88,7 @@ const UsersTable = ({
   // const totalRows = useTracker('totalRows', () =>
   //   Counts.get('users.paginated.count')
   // );
-  const users = useTracker('users', () => UsersPaginated.find().fetchAsync());
+  const users = useTracker('users', () => Meteor.users.find().fetchAsync());
 
   // const users = [];
 
