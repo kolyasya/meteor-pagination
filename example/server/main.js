@@ -58,7 +58,7 @@ publishPaginated({
 });
 
 // Users Paginated
-/* publishPaginated({
+publishPaginated({
   enableLogging: true,
   collection: Users,
   name: 'users.paginated',
@@ -71,8 +71,4 @@ publishPaginated({
 
     return fields;
   }
-}); */
-
-Meteor.publish('users.paginated', () => {
-  return Meteor.users.find();
 });

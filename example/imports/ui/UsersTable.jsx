@@ -7,8 +7,6 @@ import { useTracker, useSubscribe } from 'meteor/react-meteor-data/suspense';
 import { Counts } from 'meteor/compat:publish-counts';
 import DataTable from 'react-data-table-component';
 
-import { withTracker } from 'meteor/react-meteor-data';
-
 const UsersPaginated = new Mongo.Collection('users.paginated');
 
 const columns = [
@@ -64,35 +62,11 @@ const columns = [
   }
 ];
 
-const UsersTable = ({
-  onChangePage,
-  onChangeRowsPerPage,
-  onSort,
-  page,
-  perPage,
-  sort
-}) => {
-  useSubscribe('users.paginated', {
-    skip: page * perPage,
-    limit: perPage,
-    fields: {
-      name: 1,
-      age: 1,
-      createdAt: 1
-    },
-    sort,
-    cursorSelector: {},
-    unsupportedParamWhichLeadsToWarning: true
-  });
-
-  // const totalRows = useTracker('totalRows', () =>
-  //   Counts.get('users.paginated.count')
-  // );
-  const users = useTracker('users', () => Meteor.users.find().fetchAsync());
-
-  // const users = [];
-
-  const totalRows = 1;
+const UsersTable = ({ onChangePage, onChangeRowsPerPage, onSort }) => {
+  const totalRows = useTracker('totalRows', () =>
+    Counts.get('users.paginated.count')
+  );
+  const users = useTracker('users', () => UsersPaginated.find().fetchAsync());
 
   return (
     <DataTable
@@ -112,4 +86,21 @@ const UsersTable = ({
   );
 };
 
-export default UsersTable;
+export default (props) => {
+  const { page, perPage, sort } = props;
+
+  useSubscribe('users.paginated', {
+    skip: page * perPage,
+    limit: perPage,
+    fields: {
+      name: 1,
+      age: 1,
+      createdAt: 1
+    },
+    sort,
+    cursorSelector: {},
+    unsupportedParamWhichLeadsToWarning: true
+  });
+
+  return <UsersTable {...props} />;
+};
