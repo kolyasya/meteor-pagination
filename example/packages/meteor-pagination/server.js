@@ -24,7 +24,7 @@ checkNpmVersions(
 
 /** @type {import('./types').publishPaginated} */
 export function publishPaginated (_paginationParams) {
-  const logger = new PackageLogger({
+  const logger = PackageLogger({
     enableLogging:
       _paginationParams?.enableLogging ||
       defaultPaginationParams?.enableLogging,
@@ -56,15 +56,11 @@ export function publishPaginated (_paginationParams) {
       // It makes it easier to understand the code below
       const subscription = this;
 
-      const subscriptionParams = getSubscriptionParams({
-        subscriptionParams: _subscriptionParams,
-        logPrefix: subscription?._name
-      });
+      const subscriptionParams = getSubscriptionParams(_subscriptionParams);
 
       const cursorOptions = await getCursorOptions({
         paginationParams,
-        subscriptionParams,
-        logPrefix: subscription?._name
+        subscriptionParams
       });
 
       const selector =
