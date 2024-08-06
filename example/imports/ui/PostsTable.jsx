@@ -3,9 +3,13 @@ import { Mongo } from 'meteor/mongo';
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 
-import { Counts } from 'meteor/compat:publish-counts';
+import {
+  useTracker,
+  useSubscribe,
+  withTracker,
+} from 'meteor/react-meteor-data';
 
-import { withTracker } from 'meteor/react-meteor-data';
+import { Counts } from 'meteor/compat:publish-counts';
 
 const PostsPaginated = new Mongo.Collection('posts.paginated');
 
@@ -23,9 +27,9 @@ const columns = [
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit'
+        second: '2-digit',
       });
-    }
+    },
   },
   {
     id: 'title',
@@ -33,7 +37,7 @@ const columns = [
     selector: row => row.title,
     sortable: true,
     width: '100px',
-    grow: 0
+    grow: 0,
   },
   {
     name: 'Content',
@@ -42,7 +46,7 @@ const columns = [
     selector: (row, index) =>
       row?.content?.length > 30
         ? row.content.slice(0, 30) + '...'
-        : row.content
+        : row.content,
   },
   {
     id: '_id',
@@ -50,37 +54,40 @@ const columns = [
     selector: row => row._id,
     sortable: true,
     width: '170px',
-    grow: 0
-  }
+    grow: 0,
+  },
 ];
 
-const Table = ({
-  posts,
+const PostsTable = ({
   postsLoading,
   onChangePage,
   onChangeRowsPerPage,
-  totalRows,
-  onSort
+  onSort,
 }) => {
-  const fetchUsers = async (page) => {
-    setLoading(true);
+  const totalRows = useTracker(() => Counts.get('posts.paginated.count'));
+  const posts = useTracker(() => PostsPaginated.find().fetch());
 
-    setData(response.data.data);
-    setTotalRows(response.data.total);
-    setLoading(false);
-  };
+  console.log(totalRows, posts);
 
-  const handlePageChange = (page) => {
-    fetchUsers(page);
-  };
+  // const fetchUsers = async (page) => {
+  //   setLoading(true);
 
-  const handlePerRowsChange = async (newPerPage, page) => {
-    setLoading(true);
+  //   setData(response.data.data);
+  //   setTotalRows(response.data.total);
+  //   setLoading(false);
+  // };
 
-    setData(response.data.data);
-    setPerPage(newPerPage);
-    setLoading(false);
-  };
+  // const handlePageChange = (page) => {
+  //   fetchUsers(page);
+  // };
+
+  // const handlePerRowsChange = async (newPerPage, page) => {
+  //   setLoading(true);
+
+  //   setData(response.data.data);
+  //   setPerPage(newPerPage);
+  //   setLoading(false);
+  // };
 
   // useEffect(() => {
   //   const intervalId = setInterval(() => {
@@ -108,27 +115,55 @@ const Table = ({
   );
 };
 
-export default withTracker(({ perPage, page, sort }) => {
-  const totalRows = Counts.get('posts.paginated.count');
+export default props => {
+  const [perPagePosts, setPerPagePosts] = useState(10);
+  const [pagePosts, setPagePosts] = useState(0);
+  const [sortPosts, setSortPosts] = useState({ createdAt: -1 });
 
-  const paginatedPostsSub = Meteor.subscribe('posts.paginated', {
-    skip: page * perPage,
-    limit: perPage,
+  const handlePagePostsChange = page => {
+    setPagePosts(page - 1);
+  };
+
+  const handleRowsPerPagePostsChange = (newPerPage, page) => {
+    setPerPagePosts(newPerPage);
+    setPagePosts(page);
+  };
+
+  const handleSortPosts = (column, sortDirection) => {
+    setSortPosts({ [column.id]: sortDirection === 'asc' ? 1 : -1 });
+  };
+
+  const isPostsPaginatedSubLoading = useSubscribe('posts.paginated', {
+    skip: pagePosts * perPagePosts,
+    limit: perPagePosts,
     fields: {
       title: 1,
       content: 1,
-      createdAt: 1
+      createdAt: 1,
     },
-    sort,
+    sortPosts,
 
     cursorSelector: {},
 
-    unsupportedParamWhichLeadsToWarning: true
+    unsupportedParamWhichLeadsToWarning: true,
   });
 
-  return {
+  return (
+    <PostsTable
+      onChangePage={handlePagePostsChange}
+      perPage={perPagePosts}
+      onChangeRowsPerPage={handleRowsPerPagePostsChange}
+      page={pagePosts}
+      onSort={handleSortPosts}
+      postsLoading={isPostsPaginatedSubLoading()}
+      sort={sortPosts}
+      {...props}
+    />
+  );
+
+  /*   return {
     postsLoading: !paginatedPostsSub.ready(),
-    posts: PostsPaginated.find().fetch(),
+    posts: .fetch(),
     totalRows
-  };
-})(Table);
+  }; */
+};

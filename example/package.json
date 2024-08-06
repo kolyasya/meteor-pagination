@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.2",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
     "lodash.defaults": "^4.2.0",
     "lodash.pullall": "^4.2.0",
     "meteor-node-stubs": "^1.2.7",
@@ -17,8 +19,8 @@
     "react": "^17.0.2",
     "react-data-table-component": "^7.5.4",
     "react-dom": "^17.0.2",
-    "semistandard": "^17.0.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "typescript": "^5.5.3"
   },
   "meteor": {
     "mainModule": {
@@ -28,10 +30,14 @@
     "testModule": "tests/main.js"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-standard": "^17.1.0",
+    "@babel/core": "^7.24.7",
+    "@babel/eslint-parser": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "eslint": "^8.57.0",
+    "eslint-config-alloy": "^5.1.2",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^15.7.0",
-    "eslint-plugin-promise": "^6.1.1"
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.34.3"
   }
 }

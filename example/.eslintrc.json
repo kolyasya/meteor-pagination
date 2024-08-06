@@ -1,14 +1,44 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": "standard",
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
-    "rules": {
-      "semi": ["error", "always"]
+  "extends": ["alloy", "alloy/react"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+
+  "globals": {
+    // Your global variables (setting to false means it's not allowed to be reassigned)
+    //
+    // myGlobal: false
+  },
+  "rules": {
+    "max-params": ["error", 4],
+    // Turned ON in overrides section
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "complexity": "off",
+    "brace-style": ["error", "stroustrup"],
+    "arrow-parens": ["error", "as-needed"],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-irregular-whitespace": [
+      "error",
+      { "skipJSXText": true, "skipStrings": true, "skipTemplates": true }
+    ]
+  },
+  "overrides": [
+    {
+      // enable the rule specifically for TypeScript files
+      "files": ["*.ts", "*.mts", "*.cts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-member-accessibility": "error"
+      }
     }
+  ]
 }
