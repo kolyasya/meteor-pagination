@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
 import { publishCount } from 'meteor/compat:publish-counts';
 
 import defaults from 'lodash.defaults';
@@ -13,22 +12,13 @@ import { validatePaginationParams } from './utils/validatePaginationParams';
 
 import { PackageLogger, checkUnsupportedParams } from './package-utils';
 
-// We don't use Npm.depends to prevent possible second copy of a popular npm packages
-checkNpmVersions(
-  {
-    'lodash.defaults': '4.2.x',
-    'lodash.pullall': '4.2.x'
-  },
-  'kolyasya:meteor-pagination'
-);
-
 /** @type {import('./types').publishPaginated} */
-export function publishPaginated (_paginationParams) {
+export function publishPaginated(_paginationParams) {
   const logger = PackageLogger({
     enableLogging:
       _paginationParams?.enableLogging ||
       defaultPaginationParams?.enableLogging,
-    logPrefix: `Publish Paginated | ${_paginationParams.name} |`
+    logPrefix: `Publish Paginated | ${_paginationParams.name} |`,
   });
 
   validatePaginationParams({ params: _paginationParams });
@@ -43,7 +33,7 @@ export function publishPaginated (_paginationParams) {
         'Unsupported params:',
         unsupportedParams
       );
-    }
+    },
   });
 
   // Merge default params with user provided ones
@@ -60,19 +50,19 @@ export function publishPaginated (_paginationParams) {
 
       const cursorOptions = await getCursorOptions({
         paginationParams,
-        subscriptionParams
+        subscriptionParams,
       });
 
       const selector =
         typeof paginationParams?.transformCursorSelector === 'function'
           ? paginationParams.transformCursorSelector({
             subscriptionParams,
-            paginationParams
+            paginationParams,
           })
           : typeof paginationParams?.transformCursorSelectorAsync === 'function'
             ? await paginationParams.transformCursorSelectorAsync({
               subscriptionParams,
-              paginationParams
+              paginationParams,
             })
             : subscriptionParams.cursorSelector;
 
@@ -91,7 +81,7 @@ export function publishPaginated (_paginationParams) {
 
       const countCursor = paginationParams.collection.find(selector, {
         limit: undefined,
-        fields: { _id: 1 }
+        fields: { _id: 1 },
       });
 
       const currentCount = await countCursor.countAsync();
@@ -140,10 +130,11 @@ export function publishPaginated (_paginationParams) {
             changedObserverTransformerAsync:
               paginationParams.changedObserverTransformerAsync,
             removedObserverTransformerAsync:
-              paginationParams.removedObserverTransformerAsync
+              paginationParams.removedObserverTransformerAsync,
           })
         );
-      } else {
+      }
+      else {
         // Sync observers
         handle = cursor.observeChanges(
           getObservers({
@@ -155,7 +146,7 @@ export function publishPaginated (_paginationParams) {
             changedObserverTransformer:
               paginationParams.changedObserverTransformer,
             removedObserverTransformer:
-              paginationParams.removedObserverTransformer
+              paginationParams.removedObserverTransformer,
           })
         );
       }
