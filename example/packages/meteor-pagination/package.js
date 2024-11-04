@@ -7,13 +7,13 @@ Package.describe({
 });
 
 Package.onUse(api => {
-  api.use([
-    'ecmascript@0.16.0',
-    'mongo@2.0.0',
-    'compat:publish-counts@1.0.0-beta.0',
-  ]);
+  api.use('ecmascript@0.16.8');
+  api.use('typescript@5.4.3');
+  api.use('zodern:types@1.0.13');
+  api.use('compat:publish-counts@1.0.0-beta.0');
+  api.use('mongo@2.0.0');
 
-  api.mainModule('server.js', 'server');
+  api.mainModule('server.ts', 'server');
 });
 
 Npm.depends({
