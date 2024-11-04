@@ -77,6 +77,11 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       );
       const cursor = paginationParams.collection.find(selector, cursorOptions);
 
+      if (paginationParams?.getCachedData) {
+        
+      }
+
+
       const countsName =
         paginationParams.countsCollectionName ||
         paginationParams.name + '.count';

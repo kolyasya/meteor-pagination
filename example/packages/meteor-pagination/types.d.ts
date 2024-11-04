@@ -65,6 +65,8 @@ export type GetObserversParams = {
   customCollectionName: string;
   page: number;
 
+  getCachedData: () => unknown,
+
   addedObserverTransformer?: (params: TransformerParams<'added'>) => void;
   addedObserverTransformerAsync?: (params: TransformerParams<'added'>) => void;
 

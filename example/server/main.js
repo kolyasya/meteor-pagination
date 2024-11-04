@@ -65,6 +65,15 @@ publishPaginated({
   name: 'users.paginated',
   customCollectionName: 'users.paginated',
   countsCollectionName: 'users.paginated.count',
+
+  getCachedData: params => {
+    console.log(`Getting cached data for`, params);
+
+    return {
+      cachedData: 'this is cached string',
+    };
+  },
+
   addedObserverTransformerAsync: async ({ fields }) => {
     // await asyncDelay(20);
 
