@@ -23,12 +23,12 @@ export type PublishPaginatedParams = {
     cursor,
   }: {
     cursor: Mongo.Cursor<object, object>;
-  }) => unknown;
+  }) => Promise<unknown>;
 
   /** Function to change Mongo cursor selector on the fly */
-  transformCursorSelector?: (params: TransformSelectorParams) => void;
+  transformCursorSelector?: (params: TransformSelectorParams) => object;
   /** Async version of a function to change Mongo cursor selector on the fly */
-  transformCursorSelectorAsync?: (params: TransformSelectorParams) => void;
+  transformCursorSelectorAsync?: (params: TransformSelectorParams) => object;
 
   /** Function to change Mongo cursor options on the fly */
   transformCursorOptions?: () => void;

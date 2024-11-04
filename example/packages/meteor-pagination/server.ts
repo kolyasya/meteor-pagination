@@ -80,7 +80,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       const cursor = paginationParams.collection.find(selector, cursorOptions);
 
       if (isFunction(paginationParams?.getCachedData)) {
-        cachedData = paginationParams?.getCachedData({ cursor });
+        cachedData = await paginationParams?.getCachedData({ cursor });
       }
 
       const countsName =
@@ -94,8 +94,11 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
 
       const currentCount = await countCursor.countAsync();
 
-      if (currentCount < paginationParams.reactiveCountLimit) {
-        delete paginationParams.publishCountsOptions.pullingInterval;
+      if (
+        paginationParams.reactiveCountLimit &&
+        currentCount < paginationParams.reactiveCountLimit
+      ) {
+        delete paginationParams.publishCountsOptions?.pullingInterval;
       }
 
       publishCount(
@@ -127,6 +130,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       ) {
         logger.log('Applying async observers...');
 
+        // @ts-ignore
         handle = await cursor.observeChangesAsync(
           getObservers({
             subscription,
