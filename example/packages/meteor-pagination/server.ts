@@ -48,6 +48,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       // Save into subscription variable
       // It makes it easier to understand the code below
       const subscription = this;
+      let cachedData;
 
       const subscriptionParams = getSubscriptionParams(_subscriptionParams);
 
@@ -79,6 +80,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       const cursor = paginationParams.collection.find(selector, cursorOptions);
 
       if (isFunction(paginationParams?.getCachedData)) {
+        cachedData = paginationParams?.getCachedData({ cursor });
       }
 
       const countsName =
@@ -131,6 +133,8 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
             page,
             customCollectionName: paginationParams.customCollectionName,
 
+            cachedData,
+
             addedObserverTransformerAsync:
               paginationParams.addedObserverTransformerAsync,
             changedObserverTransformerAsync:
@@ -147,6 +151,8 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
             subscription,
             page,
             customCollectionName: paginationParams.customCollectionName,
+
+            cachedData,
 
             addedObserverTransformer: paginationParams.addedObserverTransformer,
             changedObserverTransformer:

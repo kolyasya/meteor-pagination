@@ -7,6 +7,8 @@ export const getObservers = function ({
   customCollectionName,
   page,
 
+  cachedData,
+
   addedObserverTransformer,
   addedObserverTransformerAsync,
 
@@ -33,6 +35,7 @@ export const getObservers = function ({
               _id,
               subscription,
               eventType: 'added',
+              cachedData,
             })
             : fields;
 
@@ -57,6 +60,7 @@ export const getObservers = function ({
               _id,
               subscription,
               eventType: 'changed',
+              cachedData,
             })
             : fields;
 
@@ -69,6 +73,7 @@ export const getObservers = function ({
             _id,
             subscription,
             eventType: 'removed',
+            cachedData,
           });
         }
         subscription.removed(customCollectionName, _id);
@@ -86,6 +91,7 @@ export const getObservers = function ({
               _id,
               subscription,
               eventType: 'added',
+              cachedData,
             })
             : fields;
 
@@ -110,6 +116,7 @@ export const getObservers = function ({
               _id,
               subscription,
               eventType: 'changed',
+              cachedData,
             })
             : fields;
 
@@ -122,6 +129,7 @@ export const getObservers = function ({
             _id,
             subscription,
             eventType: 'removed',
+            cachedData,
           });
         }
         subscription.removed(customCollectionName, _id);

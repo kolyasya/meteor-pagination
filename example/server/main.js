@@ -74,8 +74,10 @@ publishPaginated({
     };
   },
 
-  addedObserverTransformerAsync: async ({ fields }) => {
+  addedObserverTransformerAsync: async ({ fields, cachedData }) => {
     // await asyncDelay(20);
+
+    console.log({ cachedData });
 
     fields.content = 'users_test_' + Random.id();
 
