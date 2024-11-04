@@ -1,7 +1,11 @@
 import { Meteor } from 'meteor/meteor';
+import type { PublishPaginatedParams } from '../types';
 
-/** @type {import('../types').validatePaginationParams} */
-export const validatePaginationParams = ({ params }) => {
+export const validatePaginationParams = ({
+  params,
+}: {
+  params: PublishPaginatedParams;
+}) => {
   if (!params?.name) {
     throw new Meteor.Error(
       '500',
@@ -25,6 +29,7 @@ export const validatePaginationParams = ({ params }) => {
 
   if (
     Object.prototype.hasOwnProperty.call(params, 'reactiveCountLimit') &&
+    params.reactiveCountLimit !== undefined &&
     !isNaN(params.reactiveCountLimit) &&
     params.reactiveCountLimit < 0
   ) {
@@ -39,7 +44,7 @@ export const validatePaginationParams = ({ params }) => {
     transformCursorOptions: 1,
     addedObserverTransformer: 1,
     changedObserverTransformer: 1,
-    removedObserverTransformer: 1
+    removedObserverTransformer: 1,
   };
 
   const asyncFunctions = {
@@ -47,16 +52,16 @@ export const validatePaginationParams = ({ params }) => {
     transformCursorOptionsAsync: 1,
     addedObserverTransformerAsync: 1,
     changedObserverTransformerAsync: 1,
-    removedObserverTransformerAsync: 1
+    removedObserverTransformerAsync: 1,
   };
 
   const paramsKeys = Object.keys(params);
 
-  paramsKeys.forEach((paramKeySync) => {
+  paramsKeys.forEach(paramKeySync => {
     const hasSyncFunc = syncFunctions[paramKeySync];
 
     if (hasSyncFunc) {
-      paramsKeys.forEach((paramKeyAsync) => {
+      paramsKeys.forEach(paramKeyAsync => {
         const hasAsyncFunc = asyncFunctions[paramKeyAsync];
 
         if (hasAsyncFunc) {

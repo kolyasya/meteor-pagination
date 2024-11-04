@@ -1,7 +1,7 @@
 import { PackageLogger } from '../package-utils';
 
-// observe callback function
-/** @type {import('../types').getObservers} */
+import type { GetObserversParams } from '../types';
+
 export const getObservers = function ({
   subscription,
   customCollectionName,
@@ -14,8 +14,8 @@ export const getObservers = function ({
   changedObserverTransformerAsync,
 
   removedObserverTransformer,
-  removedObserverTransformerAsync
-}) {
+  removedObserverTransformerAsync,
+}: GetObserversParams) {
   const logger = PackageLogger();
 
   if (
@@ -32,7 +32,7 @@ export const getObservers = function ({
               fields,
               _id,
               subscription,
-              eventType: 'added'
+              eventType: 'added',
             })
             : fields;
 
@@ -42,7 +42,7 @@ export const getObservers = function ({
           !Object.prototype.hasOwnProperty.call(finalFields, 'meteorPagination')
         ) {
           finalFields.meteorPagination = {
-            page
+            page,
           };
         }
 
@@ -56,25 +56,26 @@ export const getObservers = function ({
               fields,
               _id,
               subscription,
-              eventType: 'changed'
+              eventType: 'changed',
             })
             : fields;
 
         subscription.changed(customCollectionName, _id, finalFields);
       },
-      removed: async (_id) => {
+      removed: async _id => {
         logger.log(`Observer → removed: ${_id}`);
         if (typeof removedObserverTransformerAsync === 'function') {
           await removedObserverTransformerAsync({
             _id,
             subscription,
-            eventType: 'removed'
+            eventType: 'removed',
           });
         }
         subscription.removed(customCollectionName, _id);
-      }
+      },
     };
-  } else {
+  }
+  else {
     return {
       added: (_id, fields) => {
         logger.log(`Observer → added: ${_id}`);
@@ -84,7 +85,7 @@ export const getObservers = function ({
               fields,
               _id,
               subscription,
-              eventType: 'added'
+              eventType: 'added',
             })
             : fields;
 
@@ -94,7 +95,7 @@ export const getObservers = function ({
           !Object.prototype.hasOwnProperty.call(finalFields, 'meteorPagination')
         ) {
           finalFields.meteorPagination = {
-            page
+            page,
           };
         }
 
@@ -108,23 +109,23 @@ export const getObservers = function ({
               fields,
               _id,
               subscription,
-              eventType: 'changed'
+              eventType: 'changed',
             })
             : fields;
 
         subscription.changed(customCollectionName, _id, finalFields);
       },
-      removed: (_id) => {
+      removed: _id => {
         logger.log(`Observer → removed: ${_id}`);
         if (typeof removedObserverTransformer === 'function') {
           removedObserverTransformer({
             _id,
             subscription,
-            eventType: 'removed'
+            eventType: 'removed',
           });
         }
         subscription.removed(customCollectionName, _id);
-      }
+      },
     };
   }
 };

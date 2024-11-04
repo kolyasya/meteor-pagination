@@ -1,4 +1,5 @@
 import { Random } from 'meteor/random';
+import { Meteor } from 'meteor/meteor';
 
 import './fixtures';
 import { publishPaginated } from 'meteor/kolyasya:meteor-pagination';
@@ -44,7 +45,7 @@ publishPaginated({
   },
 
   transformCursorSelectorAsync: async ({ subscriptionParams }) => {
-    const user = await Meteor.user();
+    const user = await Meteor.userAsync();
 
     // Will return nothing
     if (!user?.username === 'admin') {

@@ -18,5 +18,5 @@ Package.onUse(api => {
 
 Npm.depends({
   'lodash.defaults': '4.2.0',
-  'lodash.pullall': '4.2.0',
+  'lodash.pullall': '4.2.0'
 });

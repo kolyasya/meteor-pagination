@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
+// @ts-ignore
 import { publishCount } from 'meteor/compat:publish-counts';
+
+import type { PublishPaginatedParams } from './types';
 
 import defaults from 'lodash.defaults';
 
@@ -12,8 +15,7 @@ import { validatePaginationParams } from './utils/validatePaginationParams';
 
 import { PackageLogger, checkUnsupportedParams } from './package-utils';
 
-/** @type {import('./types').publishPaginated} */
-export function publishPaginated(_paginationParams) {
+export function publishPaginated(_paginationParams: PublishPaginatedParams) {
   const logger = PackageLogger({
     enableLogging:
       _paginationParams?.enableLogging ||

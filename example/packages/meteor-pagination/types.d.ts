@@ -1,4 +1,5 @@
 import { Mongo } from 'meteor/mongo';
+import type { Subscription } from 'meteor/meteor';
 
 export type PublishPaginatedParams = {
   /** Logs for publication functions */
@@ -52,20 +53,6 @@ export type PublishPaginatedParams = {
   // keepPreloaded?: boolean;
 };
 
-/**
-  Main function used to init new paginated publication
- */
-export function publishPaginated(params: PublishPaginatedParams): void;
-
-/**
-  Some conditions to make sure that passed params are in correct shape
- */
-export function validatePaginationParams({
-  params,
-}: {
-  params: PublishPaginatedParams;
-}): void;
-
 export type TransformerParams<T extends 'added' | 'changed' | 'removed'> = {
   fields?: object;
   _id: string;
@@ -74,7 +61,7 @@ export type TransformerParams<T extends 'added' | 'changed' | 'removed'> = {
 };
 
 export type GetObserversParams = {
-  subscription: object;
+  subscription: Subscription;
   customCollectionName: string;
   page: number;
 
@@ -90,10 +77,4 @@ export type GetObserversParams = {
   removedObserverTransformerAsync?: (
     params: TransformerParams<'removed'>
   ) => void;
-};
-
-export function getObservers(getObserversParams: GetObserversParams): {
-  added?: () => void;
-  changed?: () => void;
-  removed?: () => void;
 };
