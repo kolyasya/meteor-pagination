@@ -5,6 +5,7 @@ import { publishCount } from 'meteor/compat:publish-counts';
 import type { PublishPaginatedParams } from './types';
 
 import defaults from 'lodash.defaults';
+import isFunction from 'lodash.isfunction';
 
 import { getObservers } from './utils/getObservers';
 
@@ -77,10 +78,8 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       );
       const cursor = paginationParams.collection.find(selector, cursorOptions);
 
-      if (paginationParams?.getCachedData) {
-        
+      if (isFunction(paginationParams?.getCachedData)) {
       }
-
 
       const countsName =
         paginationParams.countsCollectionName ||

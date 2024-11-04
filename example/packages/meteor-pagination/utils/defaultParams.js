@@ -7,6 +7,8 @@ export const defaultPaginationParams = {
   customCollectionName: undefined,
   countsCollectionName: undefined,
 
+  getCachedData: undefined,
+
   transformCursorSelector: undefined,
   transformCursorSelectorAsync: undefined,
 
