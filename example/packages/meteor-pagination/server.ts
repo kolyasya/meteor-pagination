@@ -80,7 +80,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       const cursor = paginationParams.collection.find(selector, cursorOptions);
 
       if (isFunction(paginationParams?.getCachedData)) {
-        cachedData = await paginationParams?.getCachedData({ cursor });
+        cachedData = await paginationParams?.getCachedData({ cursor, subscription });
       }
 
       const countsName =
