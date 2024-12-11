@@ -1,6 +1,6 @@
 Package.describe({
   name: 'kolyasya:meteor-pagination',
-  version: '1.0.0-beta.7',
+  version: '1.0.0-beta.8',
   summary: 'Pagination for Meteor. Based on observeChanges and publishCounts',
   git: 'https://github.com/kolyasya/meteor-pagination',
   documentation: '../../../README.md',
