@@ -21,8 +21,10 @@ export type PublishPaginatedParams = {
   /** Returns the same data for each subscription to reduce number of DB calls */
   getCachedData: ({
     cursor,
+    subscription
   }: {
     cursor: Mongo.Cursor<object, object>;
+    subscription: Subscription, 
   }) => Promise<unknown>;
 
   /** Function to change Mongo cursor selector on the fly */
