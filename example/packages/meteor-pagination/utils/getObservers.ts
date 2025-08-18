@@ -30,7 +30,7 @@ export const getObservers = function ({
         logger.log(`Observer → added: ${_id}`);
         const finalFields =
           typeof addedObserverTransformerAsync === 'function'
-            ? await addedObserverTransformerAsync({
+            ? await addedObserverTransformerAsync.bind(this)({
               fields,
               _id,
               subscription,
@@ -55,7 +55,7 @@ export const getObservers = function ({
         logger.log(`Observer → changed: ${_id}`);
         const finalFields =
           typeof changedObserverTransformerAsync === 'function'
-            ? await changedObserverTransformerAsync({
+            ? await changedObserverTransformerAsync.bind(this)({
               fields,
               _id,
               subscription,
@@ -69,7 +69,7 @@ export const getObservers = function ({
       removed: async _id => {
         logger.log(`Observer → removed: ${_id}`);
         if (typeof removedObserverTransformerAsync === 'function') {
-          await removedObserverTransformerAsync({
+          await removedObserverTransformerAsync.bind(this)({
             _id,
             subscription,
             eventType: 'removed',
@@ -86,7 +86,7 @@ export const getObservers = function ({
         logger.log(`Observer → added: ${_id}`);
         const finalFields =
           typeof addedObserverTransformer === 'function'
-            ? addedObserverTransformer({
+            ? addedObserverTransformer.bind(this)({
               fields,
               _id,
               subscription,
@@ -111,7 +111,7 @@ export const getObservers = function ({
         logger.log(`Observer → changed: ${_id}`);
         const finalFields =
           typeof changedObserverTransformer === 'function'
-            ? changedObserverTransformer({
+            ? changedObserverTransformer.bind(this)({
               fields,
               _id,
               subscription,
@@ -125,7 +125,7 @@ export const getObservers = function ({
       removed: _id => {
         logger.log(`Observer → removed: ${_id}`);
         if (typeof removedObserverTransformer === 'function') {
-          removedObserverTransformer({
+          removedObserverTransformer.bind(this)({
             _id,
             subscription,
             eventType: 'removed',
