@@ -19,6 +19,7 @@ export const getObservers = function ({
   removedObserverTransformerAsync,
 }: GetObserversParams) {
   const logger = PackageLogger();
+  // `subscription` is the publication context passed from the publisher
 
   if (
     typeof addedObserverTransformerAsync === 'function' ||
@@ -26,11 +27,11 @@ export const getObservers = function ({
     typeof removedObserverTransformerAsync === 'function'
   ) {
     return {
-      added: async (_id, fields) => {
+      added: async function (_id, fields) {
         logger.log(`Observer → added: ${_id}`);
         const finalFields =
           typeof addedObserverTransformerAsync === 'function'
-            ? await addedObserverTransformerAsync.bind(this)({
+            ? await addedObserverTransformerAsync.call(subscription, {
               fields,
               _id,
               subscription,
@@ -51,11 +52,11 @@ export const getObservers = function ({
 
         subscription.added(customCollectionName, _id, finalFields);
       },
-      changed: async (_id, fields) => {
+      changed: async function (_id, fields) {
         logger.log(`Observer → changed: ${_id}`);
         const finalFields =
           typeof changedObserverTransformerAsync === 'function'
-            ? await changedObserverTransformerAsync.bind(this)({
+            ? await changedObserverTransformerAsync.call(subscription, {
               fields,
               _id,
               subscription,
@@ -66,10 +67,10 @@ export const getObservers = function ({
 
         subscription.changed(customCollectionName, _id, finalFields);
       },
-      removed: async _id => {
+      removed: async function (_id) {
         logger.log(`Observer → removed: ${_id}`);
         if (typeof removedObserverTransformerAsync === 'function') {
-          await removedObserverTransformerAsync.bind(this)({
+          await removedObserverTransformerAsync.call(subscription, {
             _id,
             subscription,
             eventType: 'removed',
@@ -82,11 +83,11 @@ export const getObservers = function ({
   }
   else {
     return {
-      added: (_id, fields) => {
+      added: function (_id, fields) {
         logger.log(`Observer → added: ${_id}`);
         const finalFields =
           typeof addedObserverTransformer === 'function'
-            ? addedObserverTransformer.bind(this)({
+            ? addedObserverTransformer.call(subscription, {
               fields,
               _id,
               subscription,
@@ -107,11 +108,11 @@ export const getObservers = function ({
 
         subscription.added(customCollectionName, _id, finalFields);
       },
-      changed: (_id, fields) => {
+      changed: function (_id, fields) {
         logger.log(`Observer → changed: ${_id}`);
         const finalFields =
           typeof changedObserverTransformer === 'function'
-            ? changedObserverTransformer.bind(this)({
+            ? changedObserverTransformer.call(subscription, {
               fields,
               _id,
               subscription,
@@ -122,10 +123,10 @@ export const getObservers = function ({
 
         subscription.changed(customCollectionName, _id, finalFields);
       },
-      removed: _id => {
+      removed: function (_id) {
         logger.log(`Observer → removed: ${_id}`);
         if (typeof removedObserverTransformer === 'function') {
-          removedObserverTransformer.bind(this)({
+          removedObserverTransformer.call(subscription, {
             _id,
             subscription,
             eventType: 'removed',

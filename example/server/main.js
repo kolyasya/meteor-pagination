@@ -34,7 +34,7 @@ publishPaginated({
   customCollectionName: 'posts.paginated',
   countsCollectionName: 'posts.paginated.count',
 
-  addedObserverTransformerAsync: async ({ fields }) => {
+  addedObserverTransformerAsync: async function ({ fields }) {
     /*   console.log('Delay #1');
     await asyncDelay(100);
     console.log('Delay #2'); */
@@ -44,7 +44,7 @@ publishPaginated({
     return fields;
   },
 
-  transformCursorSelectorAsync: async ({ subscriptionParams }) => {
+  transformCursorSelectorAsync: async function ({ subscriptionParams }) {
     const user = await Meteor.userAsync();
 
     // Will return nothing
@@ -74,7 +74,7 @@ publishPaginated({
     };
   },
 
-  addedObserverTransformerAsync: async ({ fields, cachedData }) => {
+  addedObserverTransformerAsync: async function ({ fields, cachedData }) {
     // await asyncDelay(20);
 
     console.log({ cachedData });

@@ -135,7 +135,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
 
         // @ts-ignore
         handle = await cursor.observeChangesAsync(
-          getObservers.bind(this)({
+          getObservers({
             subscription,
             page,
             customCollectionName: paginationParams.customCollectionName,
@@ -154,7 +154,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       else {
         // Sync observers
         handle = cursor.observeChanges(
-          getObservers.bind(this)({
+          getObservers({
             subscription,
             page,
             customCollectionName: paginationParams.customCollectionName,
