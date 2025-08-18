@@ -80,7 +80,10 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       const cursor = paginationParams.collection.find(selector, cursorOptions);
 
       if (isFunction(paginationParams?.getCachedData)) {
-        cachedData = await paginationParams?.getCachedData({ cursor, subscription });
+        cachedData = await paginationParams?.getCachedData({
+          cursor,
+          subscription,
+        });
       }
 
       const countsName =
@@ -132,7 +135,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
 
         // @ts-ignore
         handle = await cursor.observeChangesAsync(
-          getObservers({
+          getObservers.bind(this)({
             subscription,
             page,
             customCollectionName: paginationParams.customCollectionName,
@@ -151,7 +154,7 @@ export function publishPaginated(_paginationParams: PublishPaginatedParams) {
       else {
         // Sync observers
         handle = cursor.observeChanges(
-          getObservers({
+          getObservers.bind(this)({
             subscription,
             page,
             customCollectionName: paginationParams.customCollectionName,
