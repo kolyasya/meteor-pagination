@@ -67,7 +67,7 @@ publishPaginated({
   countsCollectionName: 'users.paginated.count',
 
   getCachedData: params => {
-    console.log(`Getting cached data for`, params);
+    console.log(`Getting cached data...`);
 
     return {
       cachedData: 'this is cached string',
