@@ -73,8 +73,8 @@ export const getCursorOptions = async ({ paginationParams, subscriptionParams })
   }
 
   if (
-    typeof cursorOptions.limit !== 'number' ||
-    typeof cursorOptions.skip !== 'number'
+    (typeof cursorOptions.limit !== 'undefined' && typeof cursorOptions.limit !== 'number') ||
+    (typeof cursorOptions.skip !== 'undefined' && typeof cursorOptions.skip !== 'number')
   ) {
     console.warn(
       `Check cursor options limit: ${cursorOptions.limit} and skip: ${cursorOptions.skip} params. They should be numbers for pagination to work properly`
