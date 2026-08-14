@@ -1,1 +1,4 @@
 .DS_Store
+node_modules/
+.meteor/local/
+example/packages/*/.npm/package/node_modules/
