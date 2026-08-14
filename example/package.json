@@ -1,6 +1,7 @@
 {
   "name": "example",
   "private": true,
+  "packageManager": "pnpm@11.20.0",
   "scripts": {
     "start": "WARN_WHEN_USING_OLD_API=true meteor run --port 4500 --exclude-archs web.browser.legacy,web.cordova",
     "test": "meteor test --once --driver-package meteortesting:mocha",
